@@ -647,6 +647,7 @@ html.kirish-bor:not(.kirish-tugadi) .bosh * ,
 html.kirish-bor:not(.kirish-tugadi) .bosh-taroq svg { animation-play-state: paused; }
 .kirish-logo { width: min(52vw, 18.75rem); height: auto; overflow: visible; }
 .kirish-logo * { transform-box: fill-box; }
+.kirish-logo defs * { transform-box: view-box; } /* defs dagi transform atributlari o'z koordinatasida qolsin (Safari) */
 
 .k-chiz { stroke-dasharray: 1; stroke-dashoffset: 1; animation: k-chiz .95s .15s cubic-bezier(.55,.1,.35,1) forwards; }
 .k-toj { transform-origin: 50% 100%; transform: scale(0); animation: k-toj .5s cubic-bezier(.3,1.5,.5,1) forwards; animation-delay: calc(1.05s + var(--i) * .07s); }
@@ -806,7 +807,9 @@ html.kirish-tugadi .kirish { animation: k-ket .6s cubic-bezier(.7,0,.2,1) forwar
 .vfayl-nom { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ===== Rahbariyat ===== */
-.rahbar { background: var(--kul); padding: clamp(1rem, 3vw, 2rem) 0 clamp(4rem, 8vw, 6rem); }
+.rahbar { background: var(--kul); padding: clamp(4.5rem, 10vw, 8rem) 0; }
+.haqida + .rahbar { padding-top: clamp(1rem, 3vw, 2rem); } /* «Biz haqimizda» dan keyin — bitta kul blok bo'lib davom etadi */
+.haqida:has(+ .vtasma) { padding-bottom: clamp(3rem, 6vw, 4.5rem); } /* bosh sahifa: ortidan vakansiya tasmasi keladi */
 .rahbar-panjara { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 1.25rem; align-items: stretch; }
 .rahbar-bosh { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 1.5rem; padding: 2.25rem; border-radius: 1.75rem; background: var(--kok); color: var(--oq); overflow: hidden; min-height: 26rem; }
 .rahbar-bosh::before { content: ""; position: absolute; right: -7rem; top: -7rem; width: 22rem; aspect-ratio: 1; border-radius: 50%; border: 0.75rem solid rgba(210, 163, 102, .35); }
