@@ -652,6 +652,9 @@ html.kirish-bor:not(.kirish-tugadi) .bosh-taroq svg { animation-play-state: paus
 .k-chiz { stroke-dasharray: 1; stroke-dashoffset: 1; animation: k-chiz .95s .15s cubic-bezier(.55,.1,.35,1) forwards; }
 .k-toj { transform-origin: 50% 100%; transform: scale(0); animation: k-toj .5s cubic-bezier(.3,1.5,.5,1) forwards; animation-delay: calc(1.05s + var(--i) * .07s); }
 .k-belgi { transform-origin: center; transform: translateY(50px) scale(1.35); animation: k-kotar .6s 1.45s cubic-bezier(.6,0,.2,1) forwards; }
+/* S belgisi niqobsiz paydo bo'ladi (Safari niqobni noto'g'ri chizardi) */
+.k-belgi path { transform-origin: 50% 100%; transform: scale(0); animation: k-paydo .8s .2s cubic-bezier(.3,1.45,.5,1) forwards; }
+@keyframes k-paydo { to { transform: none; } }
 .k-harflar path { transform-origin: center; opacity: 0; transform: translateX(calc(14px - var(--i) * 1px)) scale(.35); animation: k-harf .5s cubic-bezier(.2,.9,.25,1.15) forwards; animation-delay: calc(1.7s + var(--i) * .055s); }
 .k-shior { opacity: 0; transform: translateY(6px); animation: k-harf .6s 2.3s cubic-bezier(.2,.9,.25,1) forwards; }
 .k-nur { animation: k-nur .8s 2.85s ease-in-out forwards; }
