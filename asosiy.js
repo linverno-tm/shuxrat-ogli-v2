@@ -275,3 +275,19 @@ var SOZLAMA = Object.assign({
   });
 })();
 
+
+// Jonli videolar (.jonli-video, filmdan qisqa ovozsiz sahnalar): ko'rinishga kirganda o'ynaydi, chiqqanda to'xtaydi.
+// Kamroq harakat tanlangan yoki trafik tejash yoqilgan bo'lsa — faqat muqova kadri turadi.
+(function () {
+  var v = document.querySelectorAll('video.jonli-video');
+  if (!v.length || !('IntersectionObserver' in window)) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || (navigator.connection && navigator.connection.saveData)) return;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      var el = e.target;
+      if (e.isIntersecting) { el.preload = 'auto'; var p = el.play(); if (p && p.catch) p.catch(function () {}); }
+      else if (!el.paused) el.pause();
+    });
+  }, { threshold: 0.35 });
+  v.forEach(function (el) { io.observe(el); });
+})();

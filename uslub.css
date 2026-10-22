@@ -1217,3 +1217,114 @@ button.sert-muqova:disabled { cursor: default; }
 .ybelgi.kompaniya { color: #146B45; }
 
 .qongiroq-qr[hidden] { display: none; }
+
+/* «Xoʻjalik boʻylab sayohat» (Ishlab chiqarish): havodan kadr, sahnalar kartasi, video oynasi */
+.sayohat { background: var(--kok-toq); padding-bottom: clamp(3.5rem, 7vw, 5.5rem); margin-top: clamp(3rem, 6vw, 5rem); }
+.sayohat-sahna { position: relative; height: clamp(24rem, 56vw, 42rem); overflow: hidden; }
+.sayohat-fon { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sayohat-sahna::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(15, 28, 69, .78) 0%, rgba(15, 28, 69, .15) 38%, rgba(23, 43, 102, 0) 60%, var(--kok-toq) 100%); }
+.sayohat-bosh { position: relative; z-index: 1; padding-top: clamp(2rem, 5vw, 3.5rem); }
+.sayohat-bosh h2 { color: var(--oq); font-size: clamp(2rem, 4.4vw, 3.75rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; max-width: 16ch; }
+.sayohat-bosh p { margin-top: 0.75rem; color: rgba(255, 255, 255, .82); max-width: 40ch; }
+.sayohat-nuqta { position: absolute; z-index: 2; width: 1.5rem; height: 1.5rem; padding: 0; border: 3px solid var(--oq); border-radius: 50%; background: var(--oltin); cursor: pointer; transform: translate(-50%, -50%); box-shadow: 0 0 0 0 rgba(210, 163, 102, .7); animation: sayohat-puls 2.2s infinite; }
+.sayohat-nuqta span { position: absolute; left: 50%; bottom: calc(100% + 0.5rem); transform: translateX(-50%); white-space: nowrap; padding: 0.375rem 0.75rem; border-radius: 0.625rem; background: var(--oq); color: var(--kok-toq); font-weight: 800; font-size: 0.875rem; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.sayohat-nuqta:hover span, .sayohat-nuqta:focus-visible span { opacity: 1; }
+@keyframes sayohat-puls { 70% { box-shadow: 0 0 0 0.875rem rgba(210, 163, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(210, 163, 102, 0); } }
+.sayohat-royxat { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1rem; list-style: none; margin: clamp(-9rem, -10vw, -4rem) 0 0; padding: 0; }
+.sayohat-karta { display: flex; flex-direction: column; width: 100%; height: 100%; padding: 0 0 1rem; border: 0; border-radius: 1.125rem; overflow: hidden; background: var(--oq); text-align: left; font: inherit; cursor: pointer; transition: transform .25s, box-shadow .25s; }
+.sayohat-karta:hover { transform: translateY(-4px); box-shadow: 0 1.25rem 2.5rem -1.25rem rgba(0, 0, 0, .5); }
+.sayohat-karta:focus-visible { outline: 3px solid var(--oltin); outline-offset: 3px; }
+.sayohat-muqova { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: var(--kok); }
+.sayohat-muqova img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .1, 1); }
+.sayohat-karta:hover .sayohat-muqova img { transform: scale(1.06); }
+.sayohat-play { position: absolute; left: 50%; top: 50%; width: 2.75rem; height: 2.75rem; border-radius: 50%; background: rgba(210, 163, 102, .95); transform: translate(-50%, -50%); }
+.sayohat-play::after { content: ""; position: absolute; left: 54%; top: 50%; transform: translate(-50%, -50%); border-style: solid; border-width: 0.5rem 0 0.5rem 0.8rem; border-color: transparent transparent transparent var(--kok-toq); }
+.sayohat-raqam { margin: 0.875rem 1rem 0; font-size: 0.8125rem; font-weight: 800; color: var(--oltin-toq); font-variant-numeric: tabular-nums; }
+.sayohat-karta b { margin: 0.125rem 1rem 0; font-size: 1.0625rem; line-height: 1.3; color: var(--kok-toq); }
+.sayohat-oyna { width: min(64rem, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); padding: 0; border: 0; border-radius: 1.25rem; overflow: hidden; background: #0F1C45; color: var(--oq); }
+.sayohat-oyna::backdrop { background: rgba(8, 15, 40, .82); }
+.sayohat-oyna video { display: block; width: 100%; aspect-ratio: 16 / 9; max-height: calc(100dvh - 10rem); object-fit: contain; background: #000; }
+.sayohat-oyna-past { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.25rem 1.25rem; }
+.sayohat-hisob { font-size: 0.8125rem; font-weight: 800; color: var(--oltin); font-variant-numeric: tabular-nums; }
+.sayohat-oyna h3 { margin: 0.125rem 0 0; font-size: 1.25rem; color: var(--oq); }
+.sayohat-oyna-past p { margin: 0.25rem 0 0; color: rgba(255, 255, 255, .75); font-size: 0.9375rem; }
+.sayohat-boshqar { display: flex; gap: 0.5rem; flex: none; }
+.sayohat-boshqar button, .sayohat-yop { display: grid; place-items: center; width: 3rem; height: 3rem; padding: 0 0 0.2rem; border: 0; border-radius: 50%; background: var(--oltin); color: var(--kok-toq); font-size: 1.75rem; font-weight: 700; line-height: 1; cursor: pointer; }
+.sayohat-boshqar button:hover { background: #E0B67E; }
+.sayohat-yop { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.5rem; height: 2.5rem; background: rgba(0, 0, 0, .55); color: var(--oq); font-size: 1.5rem; }
+@media (max-width: 1020px) { .sayohat-royxat { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 820px) {
+  .sayohat-royxat { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 68%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.5rem; margin-inline: calc(var(--chet) * -1); padding-inline: var(--chet); scrollbar-width: none; }
+  .sayohat-royxat li { scroll-snap-align: start; }
+  .sayohat-nuqta span { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .sayohat-nuqta { animation: none; } .sayohat-karta, .sayohat-muqova img { transition: none; } }
+
+/* «Joʻja buyurtmasi»: chapda hisoblagich, oʻngda ariza */
+.mahsulot-tugma { margin-top: 1.25rem; }
+.joja { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 6fr); gap: clamp(1.5rem, 3vw, 2.5rem); align-items: start; padding-top: clamp(2rem, 4vw, 3rem); }
+.joja-hisob { display: grid; gap: 1.25rem; }
+.joja-rasm { margin: 0; aspect-ratio: 16 / 7; border-radius: 1.5rem; overflow: hidden; background: var(--kok); }
+.joja-rasm img { width: 100%; height: 100%; object-fit: cover; }
+.joja-kirit { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 1rem 1.5rem; align-items: start; }
+.joja-kirit .maydon > span { font-weight: 700; color: var(--matn); }
+.joja-kirit small { color: var(--xira); font-size: 0.8125rem; }
+.joja-son { display: grid; grid-template-columns: minmax(0, 1fr) 7.5rem; gap: 0.875rem; align-items: center; }
+.joja-son input[type=range] { width: 100%; accent-color: var(--kok); height: 2rem; }
+.joja-son input[data-son], .joja-kirit input[type=date] { font: inherit; font-weight: 800; color: var(--kok); text-align: center; min-height: 3.25rem; padding: 0 0.75rem; border: 2px solid #DDE0EA; border-radius: 0.875rem; background: var(--oq); width: 100%; font-variant-numeric: tabular-nums; }
+.joja-kirit input[type=date] { text-align: left; }
+.joja-son input[data-son]:focus-visible, .joja-kirit input[type=date]:focus-visible { outline: none; border-color: var(--kok); box-shadow: 0 0 0 0.25rem rgba(210, 163, 102, .35); }
+.joja-natija { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin: 0; }
+.joja-natija > div { display: grid; gap: 0.125rem; padding: 1rem 1.125rem; border-radius: 1rem; background: var(--kul); }
+.joja-natija > div:first-child { background: var(--kok); }
+.joja-natija dt { font-size: 0.875rem; font-weight: 700; color: var(--xira); }
+.joja-natija dd { margin: 0; font-size: clamp(1.25rem, 2.2vw, 1.625rem); font-weight: 900; color: var(--kok-toq); line-height: 1.2; font-variant-numeric: tabular-nums; }
+.joja-natija small { font-size: 0.8125rem; color: var(--xira); }
+.joja-natija > div:first-child dt, .joja-natija > div:first-child small { color: rgba(255, 255, 255, .72); }
+.joja-natija > div:first-child dd { color: var(--oq); }
+.joja-ozuqa { border-radius: 1rem; background: var(--kul); padding: 0.875rem 1.125rem; }
+.joja-ozuqa summary { cursor: pointer; font-weight: 800; color: var(--kok); }
+.joja-ozuqa table { width: 100%; margin-top: 0.75rem; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.joja-ozuqa th, .joja-ozuqa td { padding: 0.5rem 0.25rem; text-align: left; border-top: 1px solid #DDE0EA; }
+.joja-ozuqa th { font-size: 0.8125rem; color: var(--xira); }
+.joja-ozuqa td:last-child { font-weight: 800; color: var(--kok-toq); text-align: right; }
+.joja-izoh { font-size: 0.875rem; color: var(--xira); max-width: 62ch; }
+.joja-forma { margin-top: 0; position: sticky; top: calc(var(--sar-h, 5rem) + 1rem); }
+.joja-forma .ariza-bosh { grid-template-columns: minmax(0, 1fr); }
+.joja-forma .ariza-bosh h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); font-weight: 900; color: var(--kok); }
+.joja-forma .ariza-maydonlar { grid-template-columns: minmax(0, 1fr); }
+.joja-forma .keng { grid-column: auto; }
+.joja-xulosa { margin: 1.125rem 0 0; padding: 0.75rem 1rem; border-radius: 0.875rem; background: #F7EEDF; color: var(--kok-toq); font-weight: 700; }
+.joja-xulosa:empty { display: none; }
+.joja-forma > .tugma { margin-top: 1.25rem; width: 100%; }
+@media (max-width: 1020px) {
+  .joja { grid-template-columns: minmax(0, 1fr); }
+  .joja-forma { position: static; }
+}
+@media (max-width: 560px) {
+  .joja-kirit { grid-template-columns: minmax(0, 1fr); }
+  .joja-son { grid-template-columns: minmax(0, 1fr) 6.5rem; }
+  .joja-rasm { aspect-ratio: 16 / 9; }
+}
+/* Joʻja sahifasidagi oʻzbekcha taqvim (public/admin-sana.js; admin paneldagi bilan bir xil) */
+.joja .sana-ro { position: relative; width: 100%; }
+.joja .sana-ro .tanlov-tugma { display: flex; align-items: center; gap: 0.625rem; width: 100%; min-height: 3.25rem; padding: 0 0.875rem; font: inherit; font-weight: 800; color: var(--kok); text-align: left; background: var(--oq); border: 2px solid #DDE0EA; border-radius: 0.875rem; cursor: pointer; font-variant-numeric: tabular-nums; }
+.joja .sana-ro .tanlov-tugma:focus-visible, .joja .sana-ro.ochiq .tanlov-tugma { outline: none; border-color: var(--kok); box-shadow: 0 0 0 0.25rem rgba(210, 163, 102, .35); }
+.joja .sana-ro .tanlov-matn { flex: 1; }
+.joja .sana-ro .tanlov-tugma svg { color: var(--xira); }
+.joja .tanlov-royxat.taqvim { position: absolute; z-index: 30; right: 0; top: calc(100% + 0.375rem); width: min(19rem, 86vw); padding: 0.75rem; background: var(--oq); border: 1px solid #DDE0EA; border-radius: 1rem; box-shadow: 0 1.25rem 2.5rem -1.25rem rgba(23, 43, 102, .45); opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity .15s, transform .15s, visibility 0s .15s; }
+.joja .sana-ro.tepaga .taqvim { top: auto; bottom: calc(100% + 0.375rem); }
+.joja .sana-ro.ochiq .taqvim { opacity: 1; visibility: visible; transform: none; transition: opacity .15s, transform .15s; }
+.joja .taqvim-bosh { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+.joja .taqvim-bosh b { color: var(--kok); }
+.joja .taqvim button { font: inherit; border: 0; background: none; cursor: pointer; color: var(--matn); border-radius: 0.5rem; }
+.joja .taqvim-bosh button { width: 2.25rem; height: 2.25rem; font-size: 1.375rem; color: var(--kok); }
+.joja .taqvim-kunlar, .joja .taqvim-panjara { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.joja .taqvim-kunlar span { font-size: 0.75rem; font-weight: 700; color: var(--xira); padding: 0.25rem 0; }
+.joja .taqvim-panjara button { height: 2.25rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.joja .taqvim-panjara button:hover:not(:disabled), .joja .taqvim-panjara button[data-faol] { background: var(--kul); }
+.joja .taqvim-panjara button:disabled { color: #C3C7D6; cursor: default; }
+.joja .taqvim-panjara button.bugun { box-shadow: inset 0 0 0 2px var(--oltin); }
+.joja .taqvim-panjara button[aria-pressed="true"] { background: var(--kok); color: var(--oq); }
+.joja .taqvim-past { display: flex; justify-content: space-between; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #DDE0EA; }
+.joja .taqvim-past button { padding: 0.5rem 0.75rem; font-weight: 700; color: var(--kok); }

@@ -1,7 +1,13 @@
 // Sana: brauzer taqvimi o'rniga o'zbekcha taqvim (kun.oy.yil). Qiymat asl nom bilan YYYY-MM-DD ko'rinishida yuboriladi.
+// Admin panelda va saytdagi «Joʻja buyurtmasi»da ishlatiladi; min bo'lsa — undan oldingi kunlar tanlanmaydi.
 (function () {
-  var OYLAR = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
-  var KUNLAR = ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya'];
+  var Y = {
+    uz: { oy: ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'], kun: ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya'], bugun: 'Bugun', tozala: 'Tozalash', tanla: 'Sana tanlang', old: 'Oldingi oy', key: 'Keyingi oy' },
+    ru: { oy: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'], kun: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'], bugun: 'Сегодня', tozala: 'Очистить', tanla: 'Выберите дату', old: 'Предыдущий месяц', key: 'Следующий месяц' },
+    en: { oy: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], kun: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], bugun: 'Today', tozala: 'Clear', tanla: 'Choose a date', old: 'Previous month', key: 'Next month' },
+  }[document.documentElement.lang] || null;
+  if (!Y) Y = { oy: ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'], kun: ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya'], bugun: 'Bugun', tozala: 'Tozalash', tanla: 'Sana tanlang', old: 'Oldingi oy', key: 'Keyingi oy' };
+  var OYLAR = Y.oy, KUNLAR = Y.kun;
   function ikki(n) { return (n < 10 ? '0' : '') + n; }
   function iso(d) { return d.getFullYear() + '-' + ikki(d.getMonth() + 1) + '-' + ikki(d.getDate()); }
   function oqi(s) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], m[2] - 1, +m[3]) : null; }
@@ -18,14 +24,14 @@
     btn.innerHTML = '<span class="tanlov-matn"></span><svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px"><rect x="3.5" y="5" width="17" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 10h17M8 3v4M16 3v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
     var matn = btn.querySelector('.tanlov-matn');
     var oyna = document.createElement('div'); oyna.className = 'tanlov-royxat taqvim'; oyna.setAttribute('role', 'dialog');
-    oyna.innerHTML = '<div class="taqvim-bosh"><button type="button" data-q="-1" aria-label="Oldingi oy">‹</button><b></b><button type="button" data-q="1" aria-label="Keyingi oy">›</button></div>' +
+    oyna.innerHTML = '<div class="taqvim-bosh"><button type="button" data-q="-1" aria-label="' + Y.old + '">‹</button><b></b><button type="button" data-q="1" aria-label="' + Y.key + '">›</button></div>' +
       '<div class="taqvim-kunlar">' + KUNLAR.map(function (k) { return '<span>' + k + '</span>'; }).join('') + '</div><div class="taqvim-panjara"></div>' +
-      '<div class="taqvim-past"><button type="button" data-a="bugun">Bugun</button>' + (inp.required ? '' : '<button type="button" data-a="tozala">Tozalash</button>') + '</div>';
+      '<div class="taqvim-past"><button type="button" data-a="bugun">' + Y.bugun + '</button>' + (inp.required ? '' : '<button type="button" data-a="tozala">' + Y.tozala + '</button>') + '</div>';
     var sarlavha = oyna.querySelector('b'), panjara = oyna.querySelector('.taqvim-panjara');
     var korish = new Date(), faol = new Date();
     function chizTugma() {
       var d = oqi(inp.value);
-      matn.textContent = d ? ikki(d.getDate()) + '.' + ikki(d.getMonth() + 1) + '.' + d.getFullYear() : 'Sana tanlang';
+      matn.textContent = d ? ikki(d.getDate()) + '.' + ikki(d.getMonth() + 1) + '.' + d.getFullYear() : Y.tanla;
       root.classList.toggle('bosh', !d);
     }
     function chiz() {
@@ -36,12 +42,12 @@
       for (var i = 0; i < siljish; i++) h += '<span></span>';
       for (var k = 1; k <= soni; k++) {
         var s = iso(new Date(korish.getFullYear(), korish.getMonth(), k));
-        h += '<button type="button" tabindex="-1" data-s="' + s + '"' + (s === tanl ? ' aria-pressed="true"' : '') +
+        h += '<button type="button" tabindex="-1" data-s="' + s + '"' + (inp.min && s < inp.min ? ' disabled' : '') + (s === tanl ? ' aria-pressed="true"' : '') +
           (s === bugun ? ' class="bugun"' : '') + (s === f ? ' data-faol' : '') + '>' + k + '</button>';
       }
       panjara.innerHTML = h;
     }
-    function tanla(s) { inp.value = s; inp.dispatchEvent(new Event('change', { bubbles: true })); chizTugma(); yop(); btn.focus(); }
+    function tanla(s) { if (s && inp.min && s < inp.min) return; inp.value = s; inp.dispatchEvent(new Event('change', { bubbles: true })); chizTugma(); yop(); btn.focus(); }
     function och() {
       yop(); ochiq = root; root.classList.add('ochiq'); btn.setAttribute('aria-expanded', 'true');
       faol = oqi(inp.value) || new Date(); korish = new Date(faol.getFullYear(), faol.getMonth(), 1);

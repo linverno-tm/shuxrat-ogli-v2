@@ -103,8 +103,9 @@ html.hb-harakat .hb-yol-trek { transform: translateX(calc(var(--p) * var(--suris
 .hb-yol-royxat { position: relative; display: flex; gap: clamp(1.5rem, 4vw, 4rem); list-style: none; margin: 0; padding: 0; }
 .hb-qadam { width: var(--qk); flex: none; }
 .hb-qadam-rasm { margin: 0; aspect-ratio: 4 / 3; border-radius: 1.5rem; overflow: hidden; background: var(--kok); }
-.hb-qadam-rasm img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); transition: transform 1.2s cubic-bezier(.2,.7,.1,1); }
-.hb-qadam.faol .hb-qadam-rasm img, html:not(.hb-harakat) .hb-qadam-rasm img { transform: none; }
+.hb-qadam-rasm img, .hb-qadam-rasm video { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); transition: transform 1.2s cubic-bezier(.2,.7,.1,1); }
+.hb-qadam-rasm video { object-position: 25% 50%; } /* film belgisi (o'ng past burchak) kesilib qoladi */
+.hb-qadam.faol .hb-qadam-rasm :is(img, video), html:not(.hb-harakat) .hb-qadam-rasm :is(img, video) { transform: none; }
 .hb-qadam-ikon { display: grid; place-items: center; background: var(--oltin); }
 .hb-qadam-ikon .ik { width: 40%; height: 40%; background: var(--kok); }
 .hb-qadam-raqam {

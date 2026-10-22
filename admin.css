@@ -263,7 +263,7 @@ details.ochiladi[open] > summary { margin-bottom: 14px; }
 .qator .tanlov-ro, .tugmalar .tanlov-ro { width: auto; min-width: 180px; }
 
 /* Belgilash katakchasi */
-input[type=checkbox] { appearance: none; -webkit-appearance: none; flex: none; display: inline-grid; place-items: center; width: 22px; height: 22px; margin: 0; border: 2px solid #C9CFE0; border-radius: 7px; background: var(--oq); cursor: pointer; vertical-align: middle; transition: background-color .15s, border-color .15s; }
+input[type=checkbox], .jadval input[type=checkbox] { appearance: none; -webkit-appearance: none; flex: none; display: inline-grid; place-items: center; width: 22px; height: 22px; min-height: 0; padding: 0; margin: 0; border: 2px solid #C9CFE0; border-radius: 7px; background: var(--oq); cursor: pointer; vertical-align: middle; transition: background-color .15s, border-color .15s; }
 input[type=checkbox]::after { content: ""; width: 10px; height: 6px; border: solid var(--oq); border-width: 0 0 2.5px 2.5px; transform: rotate(-45deg) translate(1px, -1px) scale(0); transition: transform .15s; }
 input[type=checkbox]:checked { background: var(--kok); border-color: var(--kok); }
 input[type=checkbox]:checked::after { transform: rotate(-45deg) translate(1px, -1px) scale(1); }
@@ -315,3 +315,14 @@ form.maydonlar .tugmalar .tugma.kichik { min-height: 46px; }
 @media (max-width: 900px) {
   form.maydonlar[style] { grid-template-columns: minmax(0, 1fr) !important; }
 }
+
+/* Sayohat nuqtalari (Ishlab chiqarish va ulgurji) */
+.sayohat-admin { display: grid; gap: 16px; }
+.sayohat-admin > label { max-width: 320px; }
+.sayohat-kadr { position: relative; border-radius: 12px; overflow: hidden; cursor: crosshair; }
+.sayohat-kadr img { display: block; width: 100%; height: auto; }
+.sayohat-belgi { position: absolute; transform: translate(-50%, -50%); padding: 4px 10px; border-radius: 999px; background: var(--oltin); color: var(--kok-toq); font-size: 12px; font-weight: 800; white-space: nowrap; border: 2px solid var(--oq); pointer-events: none; }
+.sayohat-qiymat { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; }
+.sayohat-qiymat li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 8px 12px; border-radius: 10px; background: var(--fon); }
+.sayohat-qiymat b { flex: 1; font-size: 14px; }
+.sayohat-holat { font-size: 12px; color: var(--xira); }
