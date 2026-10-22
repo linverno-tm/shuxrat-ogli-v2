@@ -46,7 +46,7 @@ var SOZLAMA = Object.assign({
   telefon: '+998501765025', telegram: '', instagram: '',
   // Yandex Maps JS API 2.1 kaliti — Yandex kabinetida sayt domeniga cheklang
   yandexKalit: '868c338e-c07c-4bf9-9adc-8f86a7625381',
-  jonliXarita: false,
+  jonliXarita: true,
   xarita: { lat: 40.595514, lng: 72.239171, zoom: 13 }
 }, window.SOZLAMA || {});
 
@@ -199,8 +199,7 @@ var SOZLAMA = Object.assign({
   var och = quti.querySelector('.xarita-och'), yol = quti.querySelector('.xarita-yol');
   if (och) och.href = 'https://yandex.uz/maps/?pt=' + x.lng + ',' + x.lat + '&z=16&l=map';
   if (yol) yol.href = 'https://yandex.uz/maps/?rtext=~' + x.lat + ',' + x.lng + '&rtt=auto';
-  // jonliXarita: false — Yandex xaritasi yuklanmaydi (egasi 22.10: «Yandex yozuvi bo'lmasin»; Yandex belgisini yashirish shartlarga zid),
-  // o'rniga brend kartochkasi va «Xaritada ochish» / «Yo'nalish olish» tugmalari qoladi
+  // jonliXarita: false bo'lsa Yandex yuklanmaydi — faqat brend kartochkasi (Yandex belgisi xaritada majburiy, uni yashirish shartlarga zid)
   if (!SOZLAMA.yandexKalit || !SOZLAMA.jonliXarita) return;
 
   var til = { uz: 'uz_UZ', ru: 'ru_RU', en: 'en_US' }[document.documentElement.lang] || 'uz_UZ';
