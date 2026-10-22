@@ -1214,3 +1214,5 @@ button.sert-muqova:disabled { cursor: default; }
 
 /* Kontrast (WCAG AA): och oltin va yashil yozuvlar to'qroq */
 .ybelgi.kompaniya { color: #146B45; }
+
+.qongiroq-qr[hidden] { display: none; }

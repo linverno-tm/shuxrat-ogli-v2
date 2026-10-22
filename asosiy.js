@@ -252,10 +252,17 @@ var SOZLAMA = Object.assign({
   if (!oyna || !oyna.showModal) return;
   var mobil = matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   var nusxalandi = oyna.querySelector('.qongiroq-nusxalandi');
+  var raqamEl = oyna.querySelector('.qongiroq-raqam'), qr = oyna.querySelector('.qongiroq-qr');
+  var asosiyHref = raqamEl.getAttribute('href'), asosiyMatn = raqamEl.textContent;
   document.addEventListener('click', function (e) {
     var a = e.target.closest('a[href^="tel:"]');
     if (!a || mobil || a.closest('.qongiroq-oyna')) return;
     e.preventDefault();
+    // boshqa raqam (masalan, masʼulning) bosilsa — oynada oʻsha raqam; QR faqat asosiy raqam uchun
+    var boshqa = a.getAttribute('href') !== asosiyHref;
+    raqamEl.setAttribute('href', boshqa ? a.getAttribute('href') : asosiyHref);
+    raqamEl.textContent = boshqa ? (a.dataset.raqam || a.getAttribute('href').slice(4)) : asosiyMatn;
+    if (qr) qr.hidden = boshqa;
     nusxalandi.hidden = true;
     oyna.showModal();
   });
@@ -267,3 +274,4 @@ var SOZLAMA = Object.assign({
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(raqam).then(tayyor, function () {});
   });
 })();
+
