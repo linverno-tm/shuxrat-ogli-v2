@@ -29,7 +29,10 @@
   }
   function qoy(k, v) { var e = document.querySelector('[data-n="' + k + '"]'); if (e) e.textContent = v; }
 
-  // standart sana — bir haftadan keyin
+  // bosh sahifadagi hisoblagichdan kelgan son (?son=2500)
+  var kelgan = parseInt(new URLSearchParams(location.search).get('son'), 10);
+  if (kelgan >= 50 && kelgan <= 100000) { sonEl.value = son(kelgan); if (kelgan <= 20000) surgich.value = kelgan; }
+    // standart sana — bir haftadan keyin
   var bugun = new Date(); bugun.setHours(0, 0, 0, 0);
   var hafta = new Date(bugun.getTime() + 7 * 864e5);
   sanaEl.min = bugun.toISOString().slice(0, 10);

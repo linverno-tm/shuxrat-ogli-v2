@@ -296,3 +296,13 @@ html:not(.hb-harakat) .hb-yol-chiziq { display: none; }
 }
 /* ko'k fon kelganda logo xira holda qolmasin */
 .hb-oq .hb-logo-joy { opacity: 0 !important; transition: opacity .3s ease; }
+
+/* «Xoʻjalikdan dasturxongacha» lentasining oxiri: sayohatga havola (bosqich emas — raqamsiz) */
+.hb-qadam-oxir { width: var(--qk); flex: none; }
+.hb-qadam-oxir a { display: block; color: inherit; text-decoration: none; }
+.hb-oxir-belgi { background: var(--oltin) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23172B66' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / 45% no-repeat !important; transition: transform .3s; }
+.hb-qadam-oxir a:hover .hb-oxir-belgi { transform: translateX(4px); }
+.hb-qadam-oxir .hb-qadam-rasm img { transform: none; }
+.hb-qadam-oxir h3 { margin-top: 1rem; font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 900; color: var(--kok); letter-spacing: -0.02em; }
+.hb-qadam-oxir p { margin-top: 0.375rem; color: var(--xira); max-width: 30ch; }
+.hb-qadam-oxir a:focus-visible { outline: 3px solid var(--oltin); outline-offset: 4px; border-radius: 1.5rem; }
