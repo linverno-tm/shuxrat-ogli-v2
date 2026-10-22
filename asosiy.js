@@ -138,10 +138,14 @@ var SOZLAMA = Object.assign({
     var tanlangan = [].slice.call(forma.querySelectorAll('input[name="mahsulot"]:checked'))
       .map(function (c) { return c.nextElementSibling.textContent.trim(); });
     if (tanlangan.length) qatorlar.push(forma.querySelector('.tanlov legend').textContent.trim() + ' ' + tanlangan.join(', '));
-    ['hajm', 'izoh'].forEach(function (n) {
-      var el = forma.elements[n];
-      if (el.value.trim()) qatorlar.push(yorliq(el) + ': ' + el.value.trim());
-    });
+    // hajm: miqdor + birlik + davr (masalan «500 kg, haftasiga»)
+    var hajmEl = forma.elements.hajm, hajmMatn = hajmEl.value.trim();
+    if (hajmMatn && forma.elements.birlik) {
+      var tanla = function (s) { return s.options[s.selectedIndex].textContent.trim(); };
+      hajmMatn += ' ' + tanla(forma.elements.birlik) + ', ' + tanla(forma.elements.davr);
+    }
+    if (hajmMatn) qatorlar.push(forma.querySelector('.hajm-guruh span').textContent.trim() + ': ' + hajmMatn);
+    if (forma.elements.izoh.value.trim()) qatorlar.push(yorliq(forma.elements.izoh) + ': ' + forma.elements.izoh.value.trim());
     var matn = qatorlar.join('\n');
 
     matnQuti.textContent = matn;
@@ -161,7 +165,7 @@ var SOZLAMA = Object.assign({
       method: 'POST', headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         ism: ism.value, tel: tel.value, korxona: forma.elements.korxona.value, manzil: forma.elements.manzil.value,
-        mahsulotlar: tanlangan, hajm: forma.elements.hajm.value, izoh: forma.elements.izoh.value,
+        mahsulotlar: tanlangan, hajm: hajmMatn, izoh: forma.elements.izoh.value,
         til: document.documentElement.lang, veb_sayt: forma.elements.veb_sayt ? forma.elements.veb_sayt.value : '',
       }),
     }).then(function (r) {
@@ -223,6 +227,15 @@ var SOZLAMA = Object.assign({
       iconLayout: 'default#image', iconImageHref: pin,
       iconImageSize: [48, 60], iconImageOffset: [-24, -60]
     }));
+    // hamkor do'konlar (data-nuqtalar) — kichik belgilar, bosilsa nomi va manzili; xarita hammasini sig'diradi
+    var nuqtalar = [];
+    try { nuqtalar = JSON.parse(quti.dataset.nuqtalar || '[]'); } catch (e) {}
+    var toza = function (v) { var d = document.createElement('div'); d.textContent = v || ''; return d.innerHTML; };
+    nuqtalar.forEach(function (n) {
+      map.geoObjects.add(new ymaps.Placemark([n.lat, n.lng], { balloonContentHeader: toza(n.nom), balloonContentBody: toza(n.matn), hintContent: toza(n.nom) },
+        { preset: 'islands#blueCircleDotIcon', iconColor: '#1E3782' }));
+    });
+    if (nuqtalar.length) map.setBounds(map.geoObjects.getBounds(), { checkZoomRange: true, zoomMargin: 48 });
     var a = document.createElement('a');
     a.className = 'xarita-ochish'; a.href = och.href; a.target = '_blank'; a.rel = 'noopener';
     a.textContent = och.textContent;

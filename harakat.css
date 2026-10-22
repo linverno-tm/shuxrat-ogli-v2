@@ -259,3 +259,4 @@ html:not(.hb-harakat) .hb-yol-chiziq { display: none; }
   .hb-tugmalar .tugma { padding: 0 0.875rem; font-size: 0.875rem; white-space: nowrap; }
   .hb-bosh-matn p { font-size: 1rem; }
 }
+.hb .vtasma { padding-top: clamp(3rem, 6vw, 4.5rem); }
