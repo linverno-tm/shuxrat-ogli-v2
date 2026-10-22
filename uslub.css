@@ -1095,6 +1095,7 @@ button.sert-muqova:disabled { cursor: default; }
 .tashrif-videolar { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: flex-start; margin-bottom: 1.25rem; }
 .tvideo { margin: 0; flex: 1 1 30rem; min-width: 0; }
 .tvideo.tik { flex: 0 1 min(22rem, 100%); }
+.tashrif-videolar > .tvideo:first-child:not(.tik) { flex-basis: 100%; } /* birinchi yotiq video (korxona filmi) — butun kenglikda */
 .tvideo video { max-height: 80vh; object-fit: contain; }
 .tvideo video, .tvideo iframe { display: block; width: 100%; border: 0; border-radius: 1.25rem; background: #0F1C45; }
 .tvideo iframe { aspect-ratio: 16 / 9; height: auto; }
