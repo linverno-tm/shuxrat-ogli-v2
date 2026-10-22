@@ -991,8 +991,8 @@ a.akarta:hover { border-color: var(--oltin); }
 
 /* Ichki sahifalar oxirida pastki to'lqin balandligicha bo'sh joy — to'lqin matnni bosmaydi
    (bosh sahifada oxirgi «Biz haqimizda» bo'limi bu joyni o'zi qoldiradi) */
-main[class]::after { content: ""; display: block; height: 6.875rem; }
-@media (max-width: 820px) { main[class]::after { height: 3.75rem; } }
+main[class] { padding-bottom: 6.875rem; }  /* ::after emas: oqimli yuklanishda «sakrash» (CLS) bermasin */
+@media (max-width: 820px) { main[class] { padding-bottom: 3.75rem; } }
 main:not([class]) + .aloqa { background: var(--kul); } /* bosh sahifa: oxirgi bo'lim kul — to'lqin ham kul ustida */
 
 /* Yotiq telefon: sarlavha ixcham — ekran balandligi kontentga qolsin */
