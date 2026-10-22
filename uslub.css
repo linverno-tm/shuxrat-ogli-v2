@@ -1037,7 +1037,7 @@ button.sert-muqova:disabled { cursor: default; }
 .tvideo figcaption span, .tvideo figcaption time { color: rgba(255, 255, 255, .72); font-size: 0.9375rem; }
 .tashrif-suratlar { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
 .tsurat { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 1.25rem; overflow: hidden; cursor: zoom-in; background: #0F1C45; aspect-ratio: 3 / 2; }
-.tsurat img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.7,.1,1); }
+.tsurat img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; transition: transform .6s cubic-bezier(.2,.7,.1,1); }
 .tsurat span { position: absolute; left: 0; right: 0; bottom: 0; padding: 2.5rem 1rem 0.875rem; text-align: left; font: 700 0.9375rem/1.3 "Libre Franklin", sans-serif; color: var(--oq); background: linear-gradient(to top, rgba(15, 28, 69, .85), transparent); }
 .tsurat:hover img, .tsurat:focus-visible img { transform: scale(1.05); }
 .tsurat:focus-visible { outline: 3px solid var(--oltin); outline-offset: 3px; }
