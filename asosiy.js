@@ -276,6 +276,22 @@ var SOZLAMA = Object.assign({
 })();
 
 
+// Video muqovasi (data-poster) va pleyer metama'lumoti ekranga yaqinlashganda yuklanadi — bosh ekran tezroq chiqsin.
+(function () {
+  var v = document.querySelectorAll('video[data-poster]');
+  if (!v.length) return;
+  function qoy(el) {
+    if (el.dataset.poster) el.poster = el.dataset.poster;
+    el.removeAttribute('data-poster');
+    if (el.closest('.pleyer') && el.preload === 'none') el.preload = 'metadata';
+  }
+  if (!('IntersectionObserver' in window)) { v.forEach(qoy); return; }
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); qoy(e.target); } });
+  }, { rootMargin: '600px 600px' });
+  v.forEach(function (el) { io.observe(el); });
+})();
+
 // Jonli videolar (.jonli-video, filmdan qisqa ovozsiz sahnalar): ko'rinishga kirganda o'ynaydi, chiqqanda to'xtaydi.
 // Kamroq harakat tanlangan yoki trafik tejash yoqilgan bo'lsa — faqat muqova kadri turadi.
 (function () {
