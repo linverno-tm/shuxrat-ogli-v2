@@ -78,7 +78,16 @@ html.hb-harakat .hb-pastga { display: inline-flex; }
   transform-origin: 0 0; will-change: transform;
   transform: translate(calc(var(--dx, 0px) * (1 - var(--t))), calc(var(--dy, 0px) * (1 - var(--t)))) scale(calc(1 + (var(--r, 1) - 1) * (1 - var(--t))));
 }
-.hb-fon-qatlam img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; transform: scaleX(-1); }
+.hb-tovuq { position: relative; width: 100%; height: 100%; transform: scaleX(-1); }
+.hb-tovuq img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+/* jonli bosh (skriptlar/tovuq_jonli.py): 4K suratdan kesilgan bosh qismi — ko'z yumadi, o'ngga-chapga qaraydi.
+   Joyi kesim bilan bir xil (4000×3992 dagi 1228,76 · 1624×1848); chetida harakat nol, niqob bilan surat ichiga singib ketadi.
+   Ochilguncha ko'rinmaydi (muqovasiz) — ostida bir xil surat turadi, birinchi kadr ham shu surat. */
+.hb-tovuq video {
+  position: absolute; left: 30.7%; top: 1.904%; width: 40.6%; height: 46.293%; object-fit: fill; pointer-events: none;
+  -webkit-mask: radial-gradient(closest-side, #000 92.8%, transparent 100%); mask: radial-gradient(closest-side, #000 92.8%, transparent 100%);
+}
+@media (prefers-reduced-motion: reduce) { .hb-tovuq video { display: none; } }
 
 /* ---------- 2. Yugurik lenta ---------- */
 .hb-lenta { background: var(--kok); color: var(--oq); overflow: hidden; padding: clamp(1rem, 2.4vw, 1.75rem) 0; }
@@ -252,7 +261,7 @@ html:not(.hb-harakat) .hb-yol-chiziq { display: none; }
   }
   /* tovuq boshi (rasmda ~48%/25%) taroqning o'ng yuqori bo'lagiga, tuxumlar pastki chap bo'lakka tushadi */
   .hb-fon-qatlam { left: 0; top: 0; width: 100%; height: 100%; transform: none; overflow: hidden; }
-  .hb-fon-qatlam img { position: absolute; left: -1%; top: -21%; width: 160%; height: auto; aspect-ratio: 1; }
+  .hb-tovuq { position: absolute; left: -1%; top: -21%; width: 160%; height: auto; aspect-ratio: 1; }
   .hb-taroq-chet { transform: none; }
   .hb-tugmalar .tugma { min-height: 3rem; padding: 0 1.125rem; font-size: 0.9375rem; }
 
@@ -261,7 +270,7 @@ html:not(.hb-harakat) .hb-yol-chiziq { display: none; }
   html.hb-harakat .hb-bosh-matn p { animation: hb-kir .8s .25s cubic-bezier(.2,.7,.1,1) both; }
   html.hb-harakat .hb-tugmalar { animation: hb-kir .8s .4s cubic-bezier(.2,.7,.1,1) both; }
   html.hb-harakat .hb-fon, html.hb-harakat .hb-taroq-chet { animation: hb-osish 1.1s .3s cubic-bezier(.2,.8,.2,1) both; }
-  html.hb-harakat .hb-fon-qatlam img { animation: hb-yaqin 6s .3s ease-out both; }
+  html.hb-harakat .hb-tovuq { animation: hb-yaqin 6s .3s ease-out both; }
 }
 /* yotiq telefon: matn chapda, taroq o'ngda — ikkalasi bir ekranda */
 @media (orientation: landscape) and (max-height: 560px) {

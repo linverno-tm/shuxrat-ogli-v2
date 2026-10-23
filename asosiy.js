@@ -305,7 +305,9 @@ var SOZLAMA = Object.assign({
       else if (!el.paused) el.pause();
     });
   }, { threshold: 0.35 });
-  v.forEach(function (el) { io.observe(el); });
+  // sahifa to'liq yuklangach boshlanadi — bosh sahifadagi jonli tovuq asosiy surat bilan tarmoqni talashmasin
+  function boshla() { v.forEach(function (el) { io.observe(el); }); }
+  if (document.readyState === 'complete') boshla(); else addEventListener('load', boshla, { once: true });
 })();
 
 // Chop etish: [data-chop] tugmasi; chop etishda yopiq savol-javoblar ham ochiladi, keyin avvalgi holatiga qaytadi
