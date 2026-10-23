@@ -298,15 +298,27 @@ var SOZLAMA = Object.assign({
   var v = document.querySelectorAll('video.jonli-video');
   if (!v.length || !('IntersectionObserver' in window)) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || (navigator.connection && navigator.connection.saveData)) return;
+  function oyna(el) { var p = el.play(); if (p && p.catch) p.catch(function () {}); }
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) {
       var el = e.target;
-      if (e.isIntersecting) { el.preload = 'auto'; var p = el.play(); if (p && p.catch) p.catch(function () {}); }
+      el._korinadi = e.isIntersecting;
+      if (e.isIntersecting) { el.preload = 'auto'; oyna(el); }
       else if (!el.paused) el.pause();
     });
   }, { threshold: 0.35 });
+  // Safari ba'zan `loop`ni bajarmay oxirida to'xtab qoladi — ko'rinib turgan video tugasa yoki o'zi to'xtasa, boshidan qayta
+  function qaytar() { var el = this; if (el._korinadi && !document.hidden) { el.currentTime = 0; oyna(el); } }
   // sahifa to'liq yuklangach boshlanadi — bosh sahifadagi jonli tovuq asosiy surat bilan tarmoqni talashmasin
-  function boshla() { v.forEach(function (el) { io.observe(el); }); }
+  function boshla() {
+    v.forEach(function (el) {
+      el.addEventListener('ended', qaytar);
+      // biz faqat ko'rinmay qolganda to'xtatamiz — ko'rinib turganda to'xtasa (Safari tsikl oxirida), qayta boshlaymiz
+      el.addEventListener('pause', function () { var el = this; setTimeout(function () { if (el.paused) qaytar.call(el); }, 60); });
+      io.observe(el);
+    });
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) v.forEach(function (el) { if (el._korinadi && el.paused) oyna(el); }); });
   if (document.readyState === 'complete') boshla(); else addEventListener('load', boshla, { once: true });
 })();
 

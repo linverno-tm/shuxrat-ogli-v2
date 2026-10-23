@@ -1,7 +1,7 @@
 // PWA: sayt telefon ekraniga o'rnatiladi; internet uzilsa — ochilgan sahifalar keshdan, bo'lmasa «Internet yo'q» sahifasi.
 // Sahifalar: avval tarmoq (doim yangi), keyin kesh. Rasm/shrift/uslub: keshdan darhol, fonda yangilanadi.
 // Admin, /shuxrat-ogli-v2/api va videolar (Range so'rovlar) keshlanmaydi. Yo'llar doiraga (scope) nisbatan — GitHub nusxasida ham ishlaydi.
-const VER = 'v3';
+const VER = 'v4';
 const DOIRA = self.registration.scope;                 // masalan https://…/ yoki https://…/shuxrat-ogli-v2/
 const SAHIFA = 'sahifa-' + VER, AKTIV = 'aktiv-' + VER;
 const OLDINDAN = ['', 'oflayn', 'uslub.css', 'asosiy.js', 'harakat.css', 'logo/belgi.svg', 'favicon.svg'].map((y) => DOIRA + y);
