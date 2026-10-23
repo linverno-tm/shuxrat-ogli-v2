@@ -307,3 +307,8 @@ var SOZLAMA = Object.assign({
   }, { threshold: 0.35 });
   v.forEach(function (el) { io.observe(el); });
 })();
+
+// Chop etish: [data-chop] tugmasi; chop etishda yopiq savol-javoblar ham ochiladi, keyin avvalgi holatiga qaytadi
+document.addEventListener('click', function (e) { if (e.target.closest('[data-chop]')) { e.preventDefault(); window.print(); } });
+addEventListener('beforeprint', function () { document.querySelectorAll('details:not([open])').forEach(function (d) { d.dataset.chopYopiq = '1'; d.open = true; }); });
+addEventListener('afterprint', function () { document.querySelectorAll('details[data-chop-yopiq]').forEach(function (d) { d.open = false; delete d.dataset.chopYopiq; }); });
