@@ -32,6 +32,8 @@
     function chizTugma() {
       var d = oqi(inp.value);
       matn.textContent = d ? ikki(d.getDate()) + '.' + ikki(d.getMonth() + 1) + '.' + d.getFullYear() : Y.tanla;
+      // ekran o'quvchi nomi ko'rinadigan matnni ham o'z ichiga olsin: «Olib ketish sanasi: 02.11.2026»
+      if (yorliq) btn.setAttribute('aria-label', yorliq.textContent.trim() + ': ' + matn.textContent);
       root.classList.toggle('bosh', !d);
     }
     function chiz() {

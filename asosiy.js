@@ -247,6 +247,9 @@ var SOZLAMA = Object.assign({
     a.textContent = och.textContent;
     quti.appendChild(a);
     quti.classList.add('jonli');
+    // Yandex mualliflik/shartlar havolalarida matn yo'q (logo) — ko'rinishini o'zgartirmay, ekran o'quvchi uchun nom beramiz
+    var nomla = function () { el.querySelectorAll('a:not([aria-label])').forEach(function (h) { if (!h.textContent.trim()) h.setAttribute('aria-label', 'Yandex'); }); };
+    setTimeout(nomla, 800); setTimeout(nomla, 2500);
   }
 })();
 

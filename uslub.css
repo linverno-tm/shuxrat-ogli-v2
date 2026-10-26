@@ -1313,9 +1313,9 @@ button.sert-muqova:disabled { cursor: default; }
 .joja-natija > div:first-child { background: var(--kok); }
 .joja-natija dt { font-size: 0.875rem; font-weight: 700; color: var(--xira); }
 .joja-natija dd { margin: 0; font-size: clamp(1.25rem, 2.2vw, 1.625rem); font-weight: 900; color: var(--kok-toq); line-height: 1.2; font-variant-numeric: tabular-nums; }
-.joja-natija small { font-size: 0.8125rem; color: var(--xira); }
-.joja-natija > div:first-child dt, .joja-natija > div:first-child small { color: rgba(255, 255, 255, .72); }
-.joja-natija > div:first-child dd { color: var(--oq); }
+.joja-natija small, .joja-natija dd.joja-izoh { font-size: 0.8125rem; font-weight: 400; line-height: 1.4; color: var(--xira); }
+.joja-natija > div:first-child dt, .joja-natija > div:first-child small, .joja-natija > div:first-child dd.joja-izoh { color: rgba(255, 255, 255, .72); }
+.joja-natija > div:first-child dd:not(.joja-izoh) { color: var(--oq); }
 .joja-ozuqa { border-radius: 1rem; background: var(--kul); padding: 0.875rem 1.125rem; }
 .joja-ozuqa summary { cursor: pointer; font-weight: 800; color: var(--kok); }
 .joja-ozuqa table { width: 100%; margin-top: 0.75rem; border-collapse: collapse; font-variant-numeric: tabular-nums; }
@@ -1587,6 +1587,8 @@ button.sert-muqova:disabled { cursor: default; }
 .ysahifa-bosh .yfiltr button { color: var(--kok); background: var(--oq); border-color: rgba(30, 55, 130, .2); }
 .ysahifa-bosh .yfiltr button:hover { border-color: var(--kok); }
 .ysahifa-bosh .yfiltr button[aria-pressed="true"] { background: var(--kok); border-color: var(--kok); color: var(--oq); }
+.ysahifa-bosh .yfiltr button span { opacity: 1; color: var(--xira); }
+.ysahifa-bosh .yfiltr button[aria-pressed="true"] span { color: rgba(255, 255, 255, .85); }
 .ysahifa-bosh .yqidiruv input { background: var(--kul); }
 .ysahifa-bosh .vorqa { color: var(--xira); }
 .ysahifa-bosh .vorqa:hover { color: var(--oltin-toq); }
