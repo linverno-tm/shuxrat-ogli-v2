@@ -47,7 +47,7 @@ html.hb-harakat .hb-sahna { position: sticky; top: var(--sar-h); }
   color: var(--matn);
 }
 .hb-bosh-matn h1 { font-size: clamp(2rem, min(3.7vw, calc(var(--sh) * 0.075)), 4rem); line-height: 1; font-weight: 900; letter-spacing: -0.035em; color: var(--kok); transition: color .45s; }
-.hb-bosh-matn p { margin-top: 1rem; max-width: 40ch; font-size: clamp(1.0625rem, 1.3vw, 1.25rem); color: var(--xira); transition: color .45s; }
+.hb-bosh-matn p { margin-top: 1rem; max-width: 27.5em; /* = 40ch Libre Franklin'da; ch zaxira shriftda torayib qatorni sakratardi */ font-size: clamp(1.0625rem, 1.3vw, 1.25rem); color: var(--xira); transition: color .45s; }
 /* matn suratga tushganda (taroq kattalashib ostiga kelganda) — oq */
 .hb-oq .hb-bosh-matn h1, html:not(.hb-harakat) .hb-bosh-matn h1 { color: var(--oq); }
 .hb-oq .hb-bosh-matn p, html:not(.hb-harakat) .hb-bosh-matn p { color: rgba(255, 255, 255, .88); }
