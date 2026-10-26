@@ -1560,44 +1560,30 @@ button.sert-muqova:disabled { cursor: default; }
 
 @media (max-width: 1320px) { .qidir-tugma { margin-left: auto; } .tel-tugma { margin-left: 0; } }
 
-/* ===== Ichki sahifalar sarlavhasi: taroq oynasi (26.10) =====
-   Bosh sahifa tili ichki sahifalarga: oq fon, katta ko'k sarlavha, o'ngda sahifaning surati taroq shaklida.
-   Bitta orkestrlangan lahza — sahifa ochilganda taroq atrofida oltin chiziq chiziladi, surat ichkariga "cho'kadi".
-   Aylantirganda surat sekin siljiydi (chuqurlik; faqat CSS scroll-timeline bor brauzerlarda). Harakat kamaytirilsa — hammasi joyida turadi. */
+/* ===== Ichki sahifalar sarlavhasi (26.10, egasi fikri bo'yicha tuzatilgan) =====
+   Chapda katta ko'k sarlavha, o'ngda sahifaning surati — butunligicha, konteyner ichida (ekran chetida kesilmaydi).
+   Brend egri chizig'i — ramkaning yuqori-chap burchagida; orqada qo'zg'almas oltin ramka chuqurlik beradi.
+   Harakat yo'q (pirpiramaydi). Surat yuklanguncha och fon. Surati yo'q sahifada ramka ko'rsatilmaydi. */
 .ysahifa-bosh {
-  --tw: min(46vw, 40rem);
   --chap: max(var(--chet), calc((100vw - var(--kenglik)) / 2 + var(--chet)));
-  background: var(--oq); color: var(--matn); position: relative; overflow: hidden; isolation: isolate;
-  min-height: calc(var(--tw) * 0.7509); display: flex; align-items: center;
-  padding: clamp(2.75rem, 5vw, 4.5rem) 0 clamp(2.75rem, 5vw, 4.5rem);
+  background: var(--oq); color: var(--matn); position: relative; isolation: isolate;
+  display: grid; grid-template-columns: minmax(0, 1fr) min(44%, 36rem); align-items: center; column-gap: clamp(2rem, 5vw, 5rem);
+  padding: clamp(2.5rem, 5vw, 4.5rem) var(--chap);
 }
 .ysahifa-bosh::after { content: none; }
-.ysahifa-bosh > .ichki { position: relative; z-index: 2; width: 100%; }
-.ysahifa-bosh > .ichki > * { max-width: calc(100vw - var(--chap) - var(--tw) - 1.5rem); }
+.ysahifa-bosh > .ichki { position: relative; z-index: 2; max-width: none; margin: 0; padding: 0; }
 .ysahifa-bosh h1 { font-size: clamp(2.5rem, 5.2vw, 4.75rem); line-height: 1; font-weight: 900; letter-spacing: -0.035em; color: var(--kok); text-wrap: balance; }
-.ysahifa-bosh p { margin-top: 1rem; max-width: min(46ch, calc(100vw - var(--chap) - var(--tw) - 1.5rem)); color: var(--xira); font-size: clamp(1.0625rem, 1.25vw, 1.25rem); line-height: 1.55; }
-.taroq-oyna { position: absolute; right: 0; bottom: 0; z-index: 1; width: var(--tw); aspect-ratio: 476.83 / 358.03; pointer-events: none; }
-.taroq-oyna-ichi {
-  position: absolute; inset: 0; overflow: hidden; background: var(--kok);
-  /* taroq shakli — SVG kesim (clipPath): niqob tasvirini ochish kerak emas, surat darhol chiziladi */
-  clip-path: url(#taroq-kesim);
+.ysahifa-bosh p { margin-top: 1rem; max-width: 46ch; color: var(--xira); font-size: clamp(1.0625rem, 1.25vw, 1.25rem); line-height: 1.55; }
+.taroq-oyna { position: relative; z-index: 1; width: 100%; aspect-ratio: 3 / 2; margin: 0 0.9rem 0.9rem 0; }
+.taroq-oyna::before {
+  content: ""; position: absolute; inset: 0; translate: 0.9rem 0.9rem; z-index: -1;
+  border: 3px solid var(--oltin); border-radius: inherit; border-radius: 58% 1.25rem 1.25rem 1.25rem / 72% 1.25rem 1.25rem 1.25rem;
 }
-.taroq-oyna-ichi img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; scale: 1.06; }
-.taroq-oyna-naqsh { position: absolute; inset: 0; background: #F4ECDF url(/shuxrat-ogli-v2/logo/naqsh.svg) 0 0 / 22rem auto repeat; }
-.taroq-oyna-kesim { position: absolute; width: 0; height: 0; }
-.taroq-oyna-chiziq { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.taroq-oyna-chiziq path { fill: none; stroke: var(--oltin); stroke-width: 7; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 0; }
-@media (prefers-reduced-motion: no-preference) {
-  .taroq-oyna-chiziq path { animation: taroq-chizil 1.5s .15s cubic-bezier(.65, 0, .25, 1) both; }
-  .taroq-oyna-ichi img { animation: taroq-chok 1.6s .1s cubic-bezier(.2, .7, .1, 1) both; }
-  @supports (animation-timeline: view()) {
-    .taroq-oyna-ichi img { animation: taroq-chok 1.6s .1s cubic-bezier(.2, .7, .1, 1) both, taroq-chuqur linear both; animation-timeline: auto, view(); animation-range: normal, exit 0% exit 100%; }
-  }
-}
-@keyframes taroq-chizil { from { stroke-dashoffset: 1; } }
-@keyframes taroq-chok { from { scale: 1.16; } }
-@keyframes taroq-chuqur { to { translate: 0 9%; } }
-/* sarlavha ichidagi boshqaruvlar — endi oq fonda */
+.taroq-oyna-ichi { position: absolute; inset: 0; overflow: hidden; background: var(--kul); border-radius: 58% 1.25rem 1.25rem 1.25rem / 72% 1.25rem 1.25rem 1.25rem; }
+.taroq-oyna-ichi img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.taroq-oyna-bosh { display: none; }
+.ysahifa-bosh:has(.taroq-oyna-bosh) { grid-template-columns: minmax(0, 1fr); }
+/* sarlavha ichidagi boshqaruvlar — oq fonda */
 .ysahifa-bosh .yfiltr button { color: var(--kok); background: var(--oq); border-color: rgba(30, 55, 130, .2); }
 .ysahifa-bosh .yfiltr button:hover { border-color: var(--kok); }
 .ysahifa-bosh .yfiltr button[aria-pressed="true"] { background: var(--kok); border-color: var(--kok); color: var(--oq); }
@@ -1611,22 +1597,16 @@ button.sert-muqova:disabled { cursor: default; }
 .ysahifa-bosh .eksport-tillar a { border-color: rgba(30, 55, 130, .2); color: var(--kok); }
 .ysahifa-bosh .eksport-tillar a[aria-current="page"] { background: var(--kok); border-color: var(--kok); color: var(--oq); }
 .ysahifa-bosh .chop-tugma { color: var(--kok); }
-/* filtr va qidiruvli sarlavhalar (yangiliklar, qonunchilik): taroq kichikroq, boshqaruv to'liq kenglikda */
-.ysahifa-bosh:has(.ysahifa-boshqaruv) { --tw: min(34vw, 28rem); }
-@media (max-width: 1020px) {
-  .ysahifa-bosh { --tw: min(44vw, 26rem); }
-}
+/* filtr va qidiruvli sarlavhalar (yangiliklar, qonunchilik): surat ixchamroq */
+.ysahifa-bosh:has(.ysahifa-boshqaruv) { grid-template-columns: minmax(0, 1fr) min(34%, 26rem); }
 @media (max-width: 820px) {
-  .ysahifa-bosh, .ysahifa-bosh:has(.ysahifa-boshqaruv) { --tw: min(74vw, 22rem); display: block; min-height: 0; padding: 2rem 0 0; }
-  .ysahifa-bosh > .ichki > *, .ysahifa-bosh p { max-width: none; }
-  .taroq-oyna { position: relative; margin: 1.5rem 0 0 auto; }
+  .ysahifa-bosh, .ysahifa-bosh:has(.ysahifa-boshqaruv) { grid-template-columns: minmax(0, 1fr); padding: 2rem var(--chet) 2.25rem; row-gap: 1.75rem; }
+  .ysahifa-bosh p { max-width: none; }
+  .taroq-oyna { aspect-ratio: 16 / 10; width: calc(100% - 0.9rem); }
+  /* qidiruv va filtrli sahifalarda telefonda asosiysi — maydon va ro'yxat: surat ko'rsatilmaydi */
+  .ysahifa-bosh:has(.ysahifa-boshqaruv) .taroq-oyna { display: none; }
 }
-@media print { .taroq-oyna { display: none !important; } .ysahifa-bosh { min-height: 0 !important; display: block !important; } }
-@media (max-width: 820px) {
-  /* qidiruv va filtrli sahifalarda telefonda asosiysi — maydon va ro'yxat: taroq ko'rsatilmaydi */
-  .taroq-oyna-bosh, .ysahifa-bosh:has(.ysahifa-boshqaruv) .taroq-oyna { display: none; }
-  .ysahifa-bosh:has(.taroq-oyna-bosh), .ysahifa-bosh:has(.ysahifa-boshqaruv) { padding-bottom: 2rem; }
-}
+@media print { .taroq-oyna { display: none !important; } .ysahifa-bosh { display: block !important; } }
 
 /* ===== Mobil menyu: tugmadan ko'k varaq bo'lib ochiladi (26.10) =====
    Havolalar katta, ketma-ket chiqadi; pastda qo'ng'iroq tugmasi; burchakda oltin taroq chizig'i chiziladi. */
@@ -1666,6 +1646,7 @@ button.sert-muqova:disabled { cursor: default; }
 }
 @media (max-width: 1320px) and (prefers-reduced-motion: reduce) { .menyu, .menyu.ochiq { transition: none; } }
 @keyframes menyu-kir { from { opacity: 0; translate: 0 0.75rem; } }
+@keyframes taroq-chizil { from { stroke-dashoffset: 1; } }
 
 /* ===== Qo'ng'iroq oynasi: ochilganda yumshoq ko'tariladi (26.10) ===== */
 @media (prefers-reduced-motion: no-preference) {
