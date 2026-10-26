@@ -103,7 +103,7 @@
   --kok: #1E3782;
   --kok-toq: #172B66;
   --oltin: #D2A366;
-  --oltin-toq: #A87A3F;
+  --oltin-toq: #85602C;   /* matn uchun: oq va kul fonda kontrast ≥ 4,5 */
   --oq: #FFFFFF;
   --kul: #EDEEF2;
   --matn: #1A2452;
@@ -987,7 +987,7 @@ a.akarta:hover { border-color: var(--oltin); }
 .akarta .ik { width: 2rem; height: 2rem; margin-bottom: 0.5rem; }
 .akarta-nom { font-size: 0.875rem; font-weight: 700; color: var(--xira); }
 .akarta b { font-size: 1.25rem; font-weight: 800; color: var(--kok); line-height: 1.3; }
-.akarta-izoh { margin-top: auto; padding-top: 0.5rem; font-size: 0.875rem; font-weight: 700; color: var(--oltin-toq); }
+.akarta-izoh { margin-top: auto; padding-top: 0.5rem; font-size: 0.875rem; font-weight: 700; color: #85602C; }  /* kul fonda o'qiladigan oltin (kontrast 4,8) */
 .akarta.asosiy { background: var(--kok); }
 .akarta.asosiy .akarta-nom { color: rgba(255,255,255,.7); }
 .akarta.asosiy b { color: var(--oq); font-size: 1.5rem; }

@@ -97,6 +97,15 @@ html.hb-harakat .hb-pastga { display: inline-flex; }
 .hb-lenta-ichi, .hb-lenta-yur { display: flex; width: max-content; }
 .hb-lenta span { display: inline-flex; align-items: center; gap: clamp(1rem, 2vw, 2rem); padding-right: clamp(1rem, 2vw, 2rem); white-space: nowrap; font-size: clamp(1.75rem, 4.4vw, 4rem); font-weight: 900; letter-spacing: -0.03em; }
 .hb-lenta img { width: 0.85em; height: 0.85em; }
+/* Lenta harakati — sof CSS: cheksiz yurish (grafik protsessorda, asosiy oqimni band qilmaydi) va aylantirganda qo'shimcha siljish
+   (scroll-timeline bor brauzerlarda). Ilgari Motion JS'da har kadrda hisoblardi — telefonda Style & Layout ni oshirardi. */
+@media (prefers-reduced-motion: no-preference) {
+  html.hb-harakat .hb-lenta-yur { animation: hb-lenta-yur 28s linear infinite; }
+  @supports (animation-timeline: scroll()) {
+    html.hb-harakat .hb-lenta-ichi { animation: hb-lenta-yur linear both; animation-timeline: scroll(root); }
+  }
+}
+@keyframes hb-lenta-yur { to { transform: translateX(-25%); } }
 
 /* ---------- 3. Jo'jadan dasturxongacha ---------- */
 .hb-yol { --p: 1; --qk: min(clamp(17rem, 33vw, 30rem), calc(var(--sh) * 0.6)); background: var(--oq); } /* oldidagi rahbariyat kul — ajralib tursin */
