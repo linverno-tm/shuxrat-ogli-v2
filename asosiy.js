@@ -7,10 +7,14 @@
   function yop() {
     menyu.classList.remove('ochiq');
     tugma.setAttribute('aria-expanded', 'false');
+    document.documentElement.classList.remove('menyu-ochiq');
   }
   tugma.addEventListener('click', function () {
+    // telefon menyusi sarlavha ostidan ekran oxirigacha (100dvh − sarlavha)
+    menyu.style.setProperty('--menyu-h', (window.innerHeight - sarlavha.getBoundingClientRect().bottom) + 'px');
     var ochiq = menyu.classList.toggle('ochiq');
     tugma.setAttribute('aria-expanded', String(ochiq));
+    document.documentElement.classList.toggle('menyu-ochiq', ochiq);
   });
   menyu.addEventListener('click', function (e) { if (e.target.closest('a')) yop(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') yop(); });
@@ -349,6 +353,22 @@ var SOZLAMA = Object.assign({
   // asosiy surat birinchi yuklansin: sahifa yuklangach yoki ko'pi bilan 1,2 s dan keyin (qaysi biri oldin bo'lsa)
   if (document.readyState === 'complete') boshla();
   else { addEventListener('load', boshla, { once: true }); setTimeout(boshla, 1200); }
+})();
+
+// Kartalar: kompyuterda (sichqoncha bilan) yengil 3D egilish; telefonda va «harakatni kamaytirish»da yo'q
+(function () {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.mahsulot-asosiy, .mahsulot, .taom-karta').forEach(function (el) {
+    el.classList.add('egil');
+    var r = null, kadr = 0, x = 0, y = 0;
+    el.addEventListener('pointerenter', function () { r = el.getBoundingClientRect(); });
+    el.addEventListener('pointermove', function (e) {
+      if (!r) r = el.getBoundingClientRect();
+      x = (e.clientX - r.left) / r.width - 0.5; y = (e.clientY - r.top) / r.height - 0.5;
+      if (!kadr) kadr = requestAnimationFrame(function () { kadr = 0; el.style.setProperty('--ex', (y * -5).toFixed(2) + 'deg'); el.style.setProperty('--ey', (x * 7).toFixed(2) + 'deg'); });
+    });
+    el.addEventListener('pointerleave', function () { r = null; el.style.removeProperty('--ex'); el.style.removeProperty('--ey'); });
+  });
 })();
 
 // Chop etish: [data-chop] tugmasi; chop etishda yopiq savol-javoblar ham ochiladi, keyin avvalgi holatiga qaytadi

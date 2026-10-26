@@ -1559,3 +1559,143 @@ button.sert-muqova:disabled { cursor: default; }
 }
 
 @media (max-width: 1320px) { .qidir-tugma { margin-left: auto; } .tel-tugma { margin-left: 0; } }
+
+/* ===== Ichki sahifalar sarlavhasi: taroq oynasi (26.10) =====
+   Bosh sahifa tili ichki sahifalarga: oq fon, katta ko'k sarlavha, o'ngda sahifaning surati taroq shaklida.
+   Bitta orkestrlangan lahza — sahifa ochilganda taroq atrofida oltin chiziq chiziladi, surat ichkariga "cho'kadi".
+   Aylantirganda surat sekin siljiydi (chuqurlik; faqat CSS scroll-timeline bor brauzerlarda). Harakat kamaytirilsa — hammasi joyida turadi. */
+.ysahifa-bosh {
+  --tw: min(46vw, 40rem);
+  --chap: max(var(--chet), calc((100vw - var(--kenglik)) / 2 + var(--chet)));
+  background: var(--oq); color: var(--matn); position: relative; overflow: hidden; isolation: isolate;
+  min-height: calc(var(--tw) * 0.7509); display: flex; align-items: center;
+  padding: clamp(2.75rem, 5vw, 4.5rem) 0 clamp(2.75rem, 5vw, 4.5rem);
+}
+.ysahifa-bosh::after { content: none; }
+.ysahifa-bosh > .ichki { position: relative; z-index: 2; width: 100%; }
+.ysahifa-bosh > .ichki > * { max-width: calc(100vw - var(--chap) - var(--tw) - 1.5rem); }
+.ysahifa-bosh h1 { font-size: clamp(2.5rem, 5.2vw, 4.75rem); line-height: 1; font-weight: 900; letter-spacing: -0.035em; color: var(--kok); text-wrap: balance; }
+.ysahifa-bosh p { margin-top: 1rem; max-width: min(46ch, calc(100vw - var(--chap) - var(--tw) - 1.5rem)); color: var(--xira); font-size: clamp(1.0625rem, 1.25vw, 1.25rem); line-height: 1.55; }
+.taroq-oyna { position: absolute; right: 0; bottom: 0; z-index: 1; width: var(--tw); aspect-ratio: 476.83 / 358.03; pointer-events: none; }
+.taroq-oyna-ichi {
+  position: absolute; inset: 0; overflow: hidden; background: var(--kok);
+  /* taroq shakli — SVG kesim (clipPath): niqob tasvirini ochish kerak emas, surat darhol chiziladi */
+  clip-path: url(#taroq-kesim);
+}
+.taroq-oyna-ichi img { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; scale: 1.06; }
+.taroq-oyna-naqsh { position: absolute; inset: 0; background: #F4ECDF url(/shuxrat-ogli-v2/logo/naqsh.svg) 0 0 / 22rem auto repeat; }
+.taroq-oyna-kesim { position: absolute; width: 0; height: 0; }
+.taroq-oyna-chiziq { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.taroq-oyna-chiziq path { fill: none; stroke: var(--oltin); stroke-width: 7; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .taroq-oyna-chiziq path { animation: taroq-chizil 1.5s .15s cubic-bezier(.65, 0, .25, 1) both; }
+  .taroq-oyna-ichi img { animation: taroq-chok 1.6s .1s cubic-bezier(.2, .7, .1, 1) both; }
+  @supports (animation-timeline: view()) {
+    .taroq-oyna-ichi img { animation: taroq-chok 1.6s .1s cubic-bezier(.2, .7, .1, 1) both, taroq-chuqur linear both; animation-timeline: auto, view(); animation-range: normal, exit 0% exit 100%; }
+  }
+}
+@keyframes taroq-chizil { from { stroke-dashoffset: 1; } }
+@keyframes taroq-chok { from { scale: 1.16; } }
+@keyframes taroq-chuqur { to { translate: 0 9%; } }
+/* sarlavha ichidagi boshqaruvlar — endi oq fonda */
+.ysahifa-bosh .yfiltr button { color: var(--kok); background: var(--oq); border-color: rgba(30, 55, 130, .2); }
+.ysahifa-bosh .yfiltr button:hover { border-color: var(--kok); }
+.ysahifa-bosh .yfiltr button[aria-pressed="true"] { background: var(--kok); border-color: var(--kok); color: var(--oq); }
+.ysahifa-bosh .yqidiruv input { background: var(--kul); }
+.ysahifa-bosh .vorqa { color: var(--xira); }
+.ysahifa-bosh .vorqa:hover { color: var(--oltin-toq); }
+.ysahifa-bosh .vchiplar.oq { color: var(--xira); }
+.ysahifa-bosh .vchiplar.oq b { color: var(--kok); }
+.ysahifa-bosh .ybelgi.oq { color: var(--oltin-toq); }
+.ymaqola .ysahifa-bosh time { color: var(--xira); }
+.ysahifa-bosh .eksport-tillar a { border-color: rgba(30, 55, 130, .2); color: var(--kok); }
+.ysahifa-bosh .eksport-tillar a[aria-current="page"] { background: var(--kok); border-color: var(--kok); color: var(--oq); }
+.ysahifa-bosh .chop-tugma { color: var(--kok); }
+/* filtr va qidiruvli sarlavhalar (yangiliklar, qonunchilik): taroq kichikroq, boshqaruv to'liq kenglikda */
+.ysahifa-bosh:has(.ysahifa-boshqaruv) { --tw: min(34vw, 28rem); }
+@media (max-width: 1020px) {
+  .ysahifa-bosh { --tw: min(44vw, 26rem); }
+}
+@media (max-width: 820px) {
+  .ysahifa-bosh, .ysahifa-bosh:has(.ysahifa-boshqaruv) { --tw: min(74vw, 22rem); display: block; min-height: 0; padding: 2rem 0 0; }
+  .ysahifa-bosh > .ichki > *, .ysahifa-bosh p { max-width: none; }
+  .taroq-oyna { position: relative; margin: 1.5rem 0 0 auto; }
+}
+@media print { .taroq-oyna { display: none !important; } .ysahifa-bosh { min-height: 0 !important; display: block !important; } }
+@media (max-width: 820px) {
+  /* qidiruv va filtrli sahifalarda telefonda asosiysi — maydon va ro'yxat: taroq ko'rsatilmaydi */
+  .taroq-oyna-bosh, .ysahifa-bosh:has(.ysahifa-boshqaruv) .taroq-oyna { display: none; }
+  .ysahifa-bosh:has(.taroq-oyna-bosh), .ysahifa-bosh:has(.ysahifa-boshqaruv) { padding-bottom: 2rem; }
+}
+
+/* ===== Mobil menyu: tugmadan ko'k varaq bo'lib ochiladi (26.10) =====
+   Havolalar katta, ketma-ket chiqadi; pastda qo'ng'iroq tugmasi; burchakda oltin taroq chizig'i chiziladi. */
+.menyu-tel, .menyu-taroq { display: none; }
+@media (max-width: 1320px) {
+  .menyu {
+    display: flex; visibility: hidden; position: absolute; left: 0; right: 0; top: 100%;
+    height: var(--menyu-h, calc(100dvh - 4.5rem)); overflow-y: auto; overscroll-behavior: contain;
+    flex-direction: column; gap: 0; margin: 0; padding: 1rem var(--chet) 2rem;
+    background: var(--kok); border: 0; isolation: isolate;
+    clip-path: circle(0 at calc(100% - 2.6rem) 0);
+    transition: clip-path .45s cubic-bezier(.7, 0, .25, 1), visibility 0s linear .45s;
+  }
+  .menyu.ochiq { display: flex; visibility: visible; clip-path: circle(160% at calc(100% - 2.6rem) 0); transition: clip-path .55s cubic-bezier(.7, 0, .25, 1); }
+  .menyu > a {
+    position: relative; z-index: 1; color: var(--oq); font-size: clamp(1.5rem, 6.2vw, 2.25rem); font-weight: 800; letter-spacing: -0.025em;
+    padding: 0.7rem 0; border-bottom: 1px solid rgba(255, 255, 255, .12); text-decoration: none;
+  }
+  .menyu > a:hover { color: var(--oltin); text-decoration: none; }
+  .menyu > a[aria-current="page"] { color: var(--oltin); text-decoration: none; }
+  .menyu .tillar { position: relative; z-index: 1; border: 0; padding: 1.25rem 0 0; gap: 0.5rem; }
+  .menyu .tillar a { color: rgba(255, 255, 255, .8); border: 1.5px solid rgba(255, 255, 255, .25); padding: 0.5rem 0.95rem; font-size: 0.9375rem; }
+  .menyu .tillar a:hover { background: rgba(255, 255, 255, .1); color: var(--oq); }
+  .menyu .tillar a[aria-current="page"] { background: var(--oltin); border-color: var(--oltin); color: var(--kok-toq); }
+  .menyu-tel {
+    position: relative; z-index: 1; display: inline-flex; align-self: flex-start; align-items: center; gap: 0.625rem; margin-top: 1.5rem;
+    padding: 0.875rem 1.375rem; border-radius: 999px; background: var(--oltin); color: var(--kok-toq); font-weight: 800; font-size: 1.125rem; text-decoration: none;
+  }
+  .menyu-tel .ik { width: 1.25rem; height: 1.25rem; background: var(--kok-toq); }
+  .menyu-taroq { display: block; position: absolute; right: 0; bottom: 0; width: min(80vw, 26rem); height: auto; z-index: 0; pointer-events: none; overflow: visible; }
+  .menyu-taroq path { fill: none; stroke: var(--oltin); stroke-width: 3; opacity: .28; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  html.menyu-ochiq { overflow: hidden; }
+}
+@media (max-width: 1320px) and (prefers-reduced-motion: no-preference) {
+  .menyu.ochiq > a, .menyu.ochiq .tillar, .menyu.ochiq .menyu-tel { animation: menyu-kir .5s calc(var(--i, 8) * 35ms + 120ms) cubic-bezier(.2, .8, .2, 1) both; }
+  .menyu.ochiq .menyu-taroq path { animation: taroq-chizil 1.2s .25s cubic-bezier(.65, 0, .25, 1) both; }
+}
+@media (max-width: 1320px) and (prefers-reduced-motion: reduce) { .menyu, .menyu.ochiq { transition: none; } }
+@keyframes menyu-kir { from { opacity: 0; translate: 0 0.75rem; } }
+
+/* ===== Qo'ng'iroq oynasi: ochilganda yumshoq ko'tariladi (26.10) ===== */
+@media (prefers-reduced-motion: no-preference) {
+  .qongiroq-oyna[open] { animation: oyna-kir .38s cubic-bezier(.2, .8, .2, 1) both; }
+  .qongiroq-oyna[open]::backdrop { animation: fon-kir .3s ease both; }
+}
+@keyframes oyna-kir { from { opacity: 0; translate: 0 1rem; scale: .96; } }
+@keyframes fon-kir { from { opacity: 0; } }
+
+/* ===== Kartalar: kompyuterda sichqoncha ostida yengil 3D egilish (asosiy.js .egil qo'shadi) ===== */
+.egil.egil { transform: perspective(1100px) rotateX(var(--ex, 0deg)) rotateY(var(--ey, 0deg)) translateY(var(--ek, 0)); transition: transform .6s cubic-bezier(.2, .8, .2, 1), box-shadow .3s; }
+.egil.egil:hover { --ek: -0.375rem; transition: transform .14s linear, box-shadow .3s; }
+.taom-karta.egil:hover, .mahsulot-asosiy.egil:hover { box-shadow: 0 1.75rem 3rem -1.75rem rgba(23, 43, 102, .45); }
+
+/* ===== 404: «4 [tuxum] 4» — nol o'rnida tuxum, ozgina tebranadi (26.10) ===== */
+.topilmadi { background: var(--oq); }
+.topilmadi-ichi { min-height: calc(100svh - 12rem); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding-top: clamp(3rem, 8vw, 6rem); padding-bottom: clamp(3rem, 8vw, 6rem); }
+.topilmadi-son { display: flex; align-items: center; gap: clamp(0.5rem, 2vw, 1.25rem); margin: 0 0 1.5rem; font-size: clamp(6rem, 22vw, 15rem); line-height: .8; font-weight: 900; letter-spacing: -0.06em; color: var(--kok); }
+.topilmadi-tuxum {
+  display: block; width: .62em; height: .8em; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 34% 30%, #FFF8EC 0 12%, #F2DDBB 38%, #D9B27A 78%, #B98D52 100%);
+  box-shadow: inset -0.04em -0.05em 0.08em rgba(120, 80, 30, .25), 0 0.06em 0.05em -0.02em rgba(23, 43, 102, .25);
+  transform-origin: 50% 92%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .topilmadi-tuxum { animation: tuxum-tebran 3.2s 1s cubic-bezier(.45, 0, .55, 1) infinite; }
+}
+@keyframes tuxum-tebran { 0%, 55%, 100% { rotate: 0deg; } 62% { rotate: -9deg; } 70% { rotate: 7deg; } 78% { rotate: -4deg; } 86% { rotate: 2deg; } }
+.topilmadi h1 { font-size: clamp(2rem, 4.5vw, 3.25rem); font-weight: 900; letter-spacing: -0.03em; color: var(--kok); }
+.topilmadi-izoh { margin-top: 0.75rem; max-width: 46ch; color: var(--xira); font-size: 1.125rem; }
+.topilmadi-qidiruv { margin-top: 1.75rem; width: min(100%, 32rem); }
+.topilmadi-havolalar { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+.topilmadi-til { margin-top: 2rem; color: var(--xira); font-size: 0.9375rem; }
