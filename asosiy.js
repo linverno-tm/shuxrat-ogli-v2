@@ -249,7 +249,7 @@ var SOZLAMA = Object.assign({
     quti.classList.add('jonli');
     // Yandex mualliflik/shartlar havolalarida matn yo'q (logo) — ko'rinishini o'zgartirmay, ekran o'quvchi uchun nom beramiz
     var nomla = function () { el.querySelectorAll('a:not([aria-label])').forEach(function (h) { if (!h.textContent.trim()) h.setAttribute('aria-label', 'Yandex'); }); };
-    setTimeout(nomla, 800); setTimeout(nomla, 2500);
+    nomla(); new MutationObserver(nomla).observe(el, { childList: true, subtree: true });
   }
 })();
 
@@ -378,3 +378,31 @@ var SOZLAMA = Object.assign({
 document.addEventListener('click', function (e) { if (e.target.closest('[data-chop]')) { e.preventDefault(); window.print(); } });
 addEventListener('beforeprint', function () { document.querySelectorAll('details:not([open])').forEach(function (d) { d.dataset.chopYopiq = '1'; d.open = true; }); });
 addEventListener('afterprint', function () { document.querySelectorAll('details[data-chop-yopiq]').forEach(function (d) { d.open = false; delete d.dataset.chopYopiq; }); });
+
+// Maydondan chiqqanda tekshiruv (Wroblewski: on blur): yozilgan majburiy maydon bo'sh yoki telefon qisqa bo'lsa — darrov qizil, tuzatilsa — qaytadi.
+// Hali tegilmagan bo'sh maydon Tab bilan o'tilganda belgilanmaydi.
+(function () {
+  var MAYDON = 'form input[required], form textarea[required]';
+  function togri(el) { return el.type === 'tel' ? el.value.replace(/\D/g, '').length >= 9 : !!el.value.trim(); }
+  document.addEventListener('focusout', function (e) {
+    var el = e.target;
+    if (!el.matches || !el.matches(MAYDON) || (!el.value && !el.dataset.tegildi)) return;
+    el.setAttribute('aria-invalid', String(!togri(el)));
+  });
+  document.addEventListener('input', function (e) {
+    var el = e.target;
+    if (!el.matches || !el.matches(MAYDON)) return;
+    el.dataset.tegildi = '1';
+    if (el.getAttribute('aria-invalid') === 'true' && togri(el)) el.setAttribute('aria-invalid', 'false');
+  });
+})();
+
+// Tezkor aloqa tugmasi: birinchi ekrandan pastda ko'rinadi, pastki aloqa bo'limi ko'ringanda yashirinadi
+(function () {
+  var t = document.querySelector('.tez-aloqa'), past = document.getElementById('aloqa');
+  if (!t || !past || !('IntersectionObserver' in window)) return;
+  var pastda = false, kadr = 0;
+  function yangila() { kadr = 0; document.documentElement.classList.toggle('tez-korin', scrollY > innerHeight * 0.8 && !pastda); }
+  addEventListener('scroll', function () { if (!kadr) kadr = requestAnimationFrame(yangila); }, { passive: true });
+  new IntersectionObserver(function (e) { pastda = e[0].isIntersecting; yangila(); }).observe(past);
+})();

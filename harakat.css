@@ -199,6 +199,7 @@ html.hb-harakat .hb-ochil > span { transform: translateY(105%); }
   .hb-yol-bosh { grid-template-columns: minmax(0, 1fr) auto; }
   .hb-yol-bosh p { display: none; }
   .hb-yol-bosh h2, .hb-mahsulot h2, .hb-faktlar h2 { font-size: clamp(1.875rem, 8.6vw, 2.5rem); }
+  @media (max-width: 360px) { .hb-yol-bosh h2 { font-size: 1.5rem; } }   /* «dasturxongacha» bitta so'z — 320 px'da sig'sin */
   .hb-karta h3 { font-size: clamp(2rem, 10vw, 2.75rem); }
   .hb-faktlar { grid-template-columns: minmax(0, 1fr); min-height: 0; }
   .hb-faktlar-rasm { height: 42vh; }
