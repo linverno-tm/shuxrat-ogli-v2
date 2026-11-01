@@ -1,0 +1,242 @@
+/* Bosh sahifa — «Hammasi tuxumdan boshlanadi» (redizayn 01.11.2026)
+   Yagona shakl: tuxum (oval). Bosh ekrandagi tovuq, lotokdagi mahsulotlar, yo'l bosqichlari, raqamlar, 3D mashina — hammasi shu shakl ichida.
+   Qoida: matn va asosiy surat darhol ko'rinadi (hech narsa opacity:0 dan boshlanmaydi). Harakat faqat bezakda:
+   oltin qobiq chizig'i va bosqichlarni ulovchi oltin ip — CSS scroll-driven animatsiya, qo'llamaydigan brauzerda shunchaki tayyor holat. */
+
+.tx {
+  --tong: #EEF2FA;         /* tong yorug'i — ko'k tomlarga tushgan och fon */
+  --kok-tun: #142659;      /* qorong'i ko'k (raqamlar) */
+  --ip: 3px;               /* oltin ip qalinligi */
+  --tuxum: 50% / 60% 60% 40% 40%;          /* tik tuxum: uchi tepada */
+  --tuxum-yotiq: 40% 60% 60% 40% / 50%;    /* yotiq tuxum: uchi o'ngda (harakat yo'nalishi) */
+  --sekin: cubic-bezier(.2, .7, .1, 1);
+  --bolim: clamp(4rem, 9vw, 7.5rem);       /* bo'limlar orasidagi nafas */
+}
+
+/* Bo'lim sarlavhasi: chapda katta display, o'ngda bitta qator */
+.tx h2 { font-size: clamp(2.25rem, 4.6vw, 4rem); line-height: 1; }
+.tx-bosh-qator { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.75rem 2.5rem; margin-bottom: clamp(2rem, 4.5vw, 3.5rem); }
+.tx-bosh-qator p { max-width: 34ch; font-size: 1.125rem; color: var(--xira); }
+.tx-bosh-qator-oq h2 { color: var(--oq); }
+.tx-bosh-qator-oq p { color: #C9D2EE; }
+.tx-pastki-havola { margin-top: clamp(2rem, 4vw, 3rem); }
+
+/* Tuxum oynasi: rasm/video shu shakl bilan kesiladi */
+.tx-oyna { position: relative; display: block; overflow: hidden; border-radius: var(--tuxum); isolation: isolate; background: var(--kul); }
+.tx-oyna img, .tx-oyna video { display: block; width: 100%; height: 100%; object-fit: cover; max-width: none; }
+
+/* ---------- 1. Bosh ekran ---------- */
+.tx-bosh { background: var(--kok); color: var(--oq); overflow: clip; }
+.tx-bosh-ichi {
+  max-width: var(--kenglik); margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3.5rem) var(--chet) clamp(3rem, 6vw, 5rem);
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(2rem, 6vw, 6rem); align-items: center;
+  min-height: min(56rem, calc(100svh - 4.75rem));
+}
+.tx-imzo img { width: 15rem; height: auto; margin-bottom: 1.5rem; opacity: .85; }
+.tx h1 {
+  font-size: clamp(2.6rem, 1.4rem + 4.6vw, 6rem); line-height: .98; letter-spacing: -0.015em;
+  color: var(--oq); max-width: 13ch; text-wrap: balance;
+}
+.tx-bosh-izoh { margin: 1.5rem 0 2rem; font-size: clamp(1.125rem, 1rem + .4vw, 1.375rem); color: #DCE3F5; max-width: 36ch; }
+.tx-ishonch { list-style: none; margin: 1.75rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.tx-ishonch a {
+  display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; padding: 0 1rem;
+  border: 1px solid rgba(210, 163, 102, .55); border-radius: 62rem; color: var(--oq); text-decoration: none; font-size: 0.9375rem; font-weight: 600;
+}
+.tx-ishonch a:hover { background: rgba(210, 163, 102, .16); }
+.tx-ishonch .ik { color: var(--oltin); width: 1.25em; height: 1.25em; }
+
+.tx-bosh-tuxum { position: relative; justify-self: center; width: min(100%, 31rem); }
+.tx-oyna-bosh { aspect-ratio: 100 / 130; background: #2A4596; }
+/* kvadrat surat tuxum balandligiga: tovuq boshi tuxumning tepasida, tuxumlar pastda */
+.tx-oyna-bosh .hb-tovuq { position: absolute; top: 0; left: -15%; width: 130%; height: 100%; transform: scaleX(-1); }
+.tx-oyna-bosh .hb-tovuq img { width: 100%; height: 100%; object-fit: cover; }
+/* jonli tovuq videosi (skriptlar/tovuq_veo.py): suratning aynan shu bo'lagiga tushadi, chetlari suratga singadi */
+.tx-oyna-bosh .hb-tovuq video {
+  position: absolute; left: 5%; top: 7.515%; width: 82%; height: 58.116%; object-fit: fill; pointer-events: none;
+  -webkit-mask: linear-gradient(to right, transparent, #000 3%, #000 97%, transparent), linear-gradient(to bottom, transparent, #000 1%, #000 96%, transparent);
+  -webkit-mask-composite: source-in;
+          mask: linear-gradient(to right, transparent, #000 3%, #000 97%, transparent), linear-gradient(to bottom, transparent, #000 1%, #000 96%, transparent);
+          mask-composite: intersect;
+}
+@media (prefers-reduced-motion: reduce) { .tx-oyna-bosh video { display: none; } }
+
+/* oltin qobiq: tuxum atrofida biroz siljigan chiziq — sahifa ochilganda bir marta chiziladi */
+.tx-qobiq { position: absolute; inset: -4% -6% -2% 4%; width: 102%; height: 106%; overflow: visible; pointer-events: none; }
+.tx-qobiq path, .tx-raqam-qobiq path { fill: none; stroke: var(--oltin); stroke-width: 1.4; vector-effect: non-scaling-stroke; stroke-dasharray: 1; }
+.tx-qobiq path { stroke-width: 3; }
+@media (prefers-reduced-motion: no-preference) {
+  .tx-qobiq path { animation: tx-chiz 1.6s .2s var(--sekin) backwards; }
+}
+@keyframes tx-chiz { from { stroke-dashoffset: 1; } }
+
+/* ---------- 2. Lotok: uch tuxum ---------- */
+.tx-lotok { padding: var(--bolim) 0; }
+.tx-lotok-qator {
+  list-style: none; margin: 0; padding: 0; position: relative; container-type: inline-size; isolation: isolate;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 4rem);
+}
+/* lotok: tuxumlarning pastki qismi o'tirgan och tasma */
+.tx-lotok-qator::before {
+  content: ""; position: absolute; z-index: -1; left: -2rem; right: -2rem;
+  top: calc((100cqw - 2 * clamp(1.5rem, 4vw, 4rem)) / 3 * 1.3 * .62);
+  height: calc((100cqw - 2 * clamp(1.5rem, 4vw, 4rem)) / 3 * 1.3 * .5);
+  background: var(--tong); border-radius: 2.5rem;
+}
+.tx-lotok-qator a { display: grid; gap: 0.5rem; justify-items: center; text-align: center; text-decoration: none; color: var(--matn); }
+.tx-oyna-mahsulot { width: 100%; aspect-ratio: 100 / 130; box-shadow: 0 1.5rem 2.5rem -1.5rem rgba(20, 38, 89, .45); transition: transform .5s var(--sekin); }
+.tx-lotok-qator a:hover .tx-oyna-mahsulot { transform: translateY(-0.5rem) rotate(-2deg); }
+.tx-mahsulot-nom { margin-top: 1.25rem; font-family: var(--display); font-size: clamp(1.75rem, 2.6vw, 2.25rem); font-weight: 800; line-height: 1.05; color: var(--kok); }
+.tx-lotok-qator a:hover .tx-mahsulot-nom { text-decoration: underline; text-decoration-color: var(--oltin); text-decoration-thickness: 2px; text-underline-offset: 0.3em; }
+.tx-belgi { font-size: 0.9375rem; font-weight: 600; color: var(--oltin-toq); }
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    /* tuxumlar lotokka tushib o'tiradi (faqat surat siljiydi, matn joyida) */
+    .tx-oyna-mahsulot { animation: tx-tush linear backwards; animation-timeline: view(); animation-range: entry 0% entry 90%; }
+    .tx-lotok-qator li:nth-child(2) .tx-oyna-mahsulot { animation-range: entry 10% entry 100%; }
+    .tx-lotok-qator li:nth-child(3) .tx-oyna-mahsulot { animation-range: entry 20% cover 45%; }
+  }
+}
+@keyframes tx-tush { from { translate: 0 -3rem; rotate: -6deg; } }
+
+/* ---------- 3. Tuxumdan dasturxongacha ---------- */
+.tx-yol { padding: var(--bolim) 0; background: var(--tong); }
+.tx-yol-royxat {
+  --g: clamp(2rem, 5vw, 4.5rem); --rg: clamp(2.5rem, 5vw, 4rem);
+  list-style: none; margin: 0; padding: 0; container-type: inline-size; view-timeline: --yol; isolation: isolate;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--g); row-gap: var(--rg);
+}
+/* ikkinchi qator teskari: ip ilonizi bo'lib qaytadi (4 → 5 → 6 o'ngdan chapga) */
+.tx-qadam:nth-child(4) { grid-area: 2 / 3; }
+.tx-qadam:nth-child(5) { grid-area: 2 / 2; }
+.tx-qadam:nth-child(6) { grid-area: 2 / 1; }
+.tx-qadam { position: relative; view-timeline: --qadam; --markaz: calc((100cqw - 2 * var(--g)) / 3 * .375); }
+.tx-qadam-joy { position: relative; display: block; }
+.tx-oyna-yotiq { aspect-ratio: 4 / 3; border-radius: var(--tuxum-yotiq); background: #C9D3EA; }
+.tx-qadam:nth-child(n+4) .tx-oyna-yotiq { border-radius: 60% 40% 40% 60% / 50%; }  /* qaytishda uchi chapga */
+.tx-qadam-son {
+  position: absolute; left: 6%; bottom: -0.5rem; display: grid; place-items: center;
+  width: 3rem; height: 3rem; border-radius: 50%; background: var(--oltin); color: var(--kok-tun);
+  font-family: var(--display); font-weight: 800; font-size: 1.5rem; line-height: 1;
+}
+.tx-qadam h3 { margin-top: 1.25rem; font-family: var(--display); font-size: 1.75rem; color: var(--kok); }
+.tx-qadam p { margin-top: 0.25rem; color: var(--xira); font-size: 1rem; max-width: 30ch; }
+/* oltin ip: qo'shni tuxumlar orasida (uchidan keyingisining to'mtoq tomoniga) */
+.tx-qadam::before, .tx-qadam::after { content: ""; position: absolute; z-index: -1; pointer-events: none; }
+.tx-qadam:nth-child(-n+2)::before, .tx-qadam:nth-child(4)::before, .tx-qadam:nth-child(5)::before {
+  top: calc(var(--markaz) - var(--ip) / 2); height: var(--ip); width: var(--g); background: var(--oltin);
+}
+.tx-qadam:nth-child(-n+2)::before { left: 100%; transform-origin: left; }
+.tx-qadam:nth-child(4)::before, .tx-qadam:nth-child(5)::before { right: 100%; transform-origin: right; }
+/* burilish: 3-bosqichdan 4-siga (o'ng tomonda yarim halqa) */
+.tx-qadam:nth-child(3)::after {
+  top: var(--markaz); right: calc(var(--g) / -2.2); width: calc(var(--g) / 1.6); height: calc(100% + var(--rg));
+  border: var(--ip) solid var(--oltin); border-left: 0; border-radius: 0 999px 999px 0; transform-origin: top;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .tx-qadam::before { animation: tx-ip-x linear both; animation-timeline: --qadam; animation-range: entry 70% cover 55%; }
+    .tx-qadam:nth-child(3)::after { animation: tx-ip-y linear both; animation-timeline: --qadam; animation-range: cover 40% cover 75%; }
+  }
+}
+@keyframes tx-ip-x { from { transform: scaleX(0); } }
+@keyframes tx-ip-y { from { transform: scaleY(0); } }
+
+/* ---------- 4. Raqamlar ---------- */
+.tx-raqam { padding: var(--bolim) 0; background: var(--kok-tun); color: var(--oq); }
+.tx-raqamlar { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); }
+.tx-raqamlar > div { position: relative; aspect-ratio: 100 / 130; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 18% 12% 10%; max-width: 17rem; width: 100%; justify-self: center; }
+.tx-raqam-qobiq { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.tx-raqam-qobiq path { stroke-width: 2; }
+.tx-raqamlar dd { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(2.5rem, 4.2vw, 3.75rem); line-height: 1; color: var(--oltin); font-variant-numeric: lining-nums; white-space: nowrap; }
+.tx-raqamlar dt { margin-top: 0.75rem; font-size: 1rem; color: #DCE3F5; max-width: 14ch; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .tx-raqam-qobiq path { animation: tx-chiz linear backwards; animation-timeline: view(); animation-range: entry 20% cover 45%; }
+  }
+}
+
+/* ---------- 5. Sifat hujjatlari ---------- */
+.tx-sifat { padding: var(--bolim) 0; }
+.tx-hujjatlar { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: clamp(2rem, 5vw, 4.5rem); }
+.tx-hujjatlar li { width: min(15rem, 42vw); display: grid; gap: 1rem; }
+.tx-hujjat {
+  display: block; width: 100%; aspect-ratio: 595 / 842; padding: 0; border: 0; border-radius: 0.375rem; background: var(--oq); cursor: zoom-in;
+  box-shadow: 0 0 0 1px #E1E5F0, 0 1.75rem 2.5rem -1.5rem rgba(20, 38, 89, .5); rotate: -3deg; transition: rotate .5s var(--sekin), translate .5s var(--sekin);
+}
+.tx-hujjatlar li:nth-child(even) .tx-hujjat { rotate: 2.5deg; }
+.tx-hujjat:hover, .tx-hujjat:focus-visible { rotate: 0deg; translate: 0 -0.5rem; }
+.tx-hujjat img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.tx-hujjat .ik { width: 40%; height: 40%; margin: auto; }
+.tx-hujjat-nom { font-weight: 700; color: var(--kok); line-height: 1.3; }
+.tx-hujjat-nom b { display: block; font-size: 0.875rem; color: var(--oltin-toq); }
+
+/* ---------- 6. Hamkor do'konlarga ---------- */
+.tx-hamkor { padding: var(--bolim) 0; background: var(--tong); }
+.tx-hamkor-ichi { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.tx-hamkor-matn p { margin-top: 1rem; color: var(--xira); max-width: 34ch; }
+.tx-hamkor-belgi { list-style: none; margin: 2rem 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.5rem; }
+.tx-hamkor-belgi li { display: flex; align-items: center; gap: 0.75rem; font-weight: 700; color: var(--kok); line-height: 1.25; }
+.tx-hamkor-belgi .ik { width: 2.75rem; height: 2.75rem; padding: 0.6rem; border-radius: 50%; background: var(--oltin); color: var(--kok-tun); -webkit-mask: none; mask: none; position: relative; }
+.tx-hamkor-belgi .ik::after { content: ""; position: absolute; inset: 0.6rem; background: currentColor; -webkit-mask: var(--ik) center / contain no-repeat; mask: var(--ik) center / contain no-repeat; }
+.tx-mashina .m3d-sahna { aspect-ratio: 4 / 3; border-radius: var(--tuxum-yotiq); background: radial-gradient(70% 60% at 50% 60%, var(--oq), #DCE4F5); overflow: hidden; isolation: isolate; box-shadow: inset 0 0 0 var(--ip) var(--oltin); }
+
+/* Qayerdan sotib olish — umumiy uslub (uslub.css), faqat bosh sahifa ritmi */
+.tx .sotuv { padding: var(--bolim) 0; }
+
+/* ---------- Telefon va planshet ---------- */
+@media (max-width: 900px) {
+  .tx-imzo { display: none; }  /* planshet/telefonda «by Baraka hamkor parranda» sarlavhada bor */
+  .tx-bosh-ichi { min-height: 0; }
+  .tx-hamkor-ichi { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 700px) {
+  .tx-bosh-ichi { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; padding-top: 1.25rem; }
+  .tx-bosh-tuxum { order: -1; width: min(56vw, 17rem); justify-self: end; margin-right: 6%; }
+  .tx-bosh-izoh { margin: 1rem 0 1.5rem; }
+}
+@media (max-width: 760px) {
+  /* lotok — yon tomonga suriladigan qator, keyingi tuxum chetdan ko'rinib turadi */
+  .tx-lotok-qator {
+    display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin: 0 calc(-1 * var(--chet)); padding: 0.5rem var(--chet) 1rem; scroll-padding-inline: var(--chet);
+  }
+  .tx-lotok-qator::-webkit-scrollbar { display: none; }
+  .tx-lotok-qator::before { display: none; }
+  .tx-lotok-qator li { flex: 0 0 62vw; scroll-snap-align: start; }
+  .tx-oyna-mahsulot { animation: none !important; }
+
+  /* yo'l — tik: tuxumlar chapda, oltin ip ular orqali pastga tushadi */
+  .tx-yol-royxat { grid-template-columns: minmax(0, 1fr); row-gap: 2rem; position: relative; }
+  .tx-qadam:nth-child(n) { grid-area: auto; display: grid; grid-template-columns: 42% minmax(0, 1fr); column-gap: 1rem; align-items: center; }
+  .tx-qadam .tx-qadam-joy { grid-row: 1 / span 2; }
+  .tx-qadam h3 { margin-top: 0; font-size: 1.5rem; align-self: end; }
+  .tx-qadam p { align-self: start; font-size: 0.9375rem; }
+  .tx-qadam-son { width: 2.5rem; height: 2.5rem; font-size: 1.25rem; left: -0.25rem; bottom: -0.25rem; }
+  .tx-oyna-yotiq, .tx-qadam:nth-child(n+4) .tx-oyna-yotiq { border-radius: 50% / 60% 60% 40% 40%; aspect-ratio: 100 / 118; }
+  .tx-qadam:nth-child(n)::before, .tx-qadam:nth-child(n)::after { display: none; }
+  .tx-yol-royxat::before {
+    content: ""; position: absolute; z-index: -1; left: 21%; top: 2rem; bottom: 2rem; width: var(--ip); margin-left: calc(var(--ip) / -2);
+    background: var(--oltin); transform-origin: top;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports ((animation-timeline: view()) and (animation-range: entry)) {
+      .tx-yol-royxat::before { animation: tx-ip-y linear both; animation-timeline: --yol; animation-range: entry 30% exit 60%; }
+    }
+  }
+
+  .tx-raqamlar { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .tx-raqamlar dd { font-size: clamp(1.75rem, 8vw, 2.5rem); }
+  .tx-raqamlar dt { font-size: 0.875rem; }
+
+  .tx-hujjatlar { gap: 1.5rem; }
+  .tx-hamkor-belgi { grid-template-columns: minmax(0, 1fr); }
+}
+/* telefon yotiq: bosh ekran ikki ustun, tuxum kichik — sarlavha ham ko'rinib tursin */
+@media (orientation: landscape) and (max-height: 560px) {
+  .tx-bosh-ichi { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 1.5rem; padding-top: 1rem; }
+  .tx-bosh-tuxum { order: 0; width: min(24vw, 10rem); margin: 0; justify-self: center; }
+  .tx h1 { font-size: clamp(1.875rem, 4.4vw, 2.25rem); max-width: 18ch; }
+  .tx-bosh-izoh { margin: 0.75rem 0 1rem; }
+}

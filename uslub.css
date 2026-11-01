@@ -98,6 +98,19 @@
   size-adjust: 119.5%; ascent-override: 80.8%; descent-override: 20.6%; line-gap-override: 0%;
 }
 
+/* Display shrift: Alegreya (OFL, public/shrift/OFL-Alegreya.txt) — iliq, qo'lda yozilgandek serif: oilaviy xo'jalik ovozi.
+   Sarlavhalar uchun; matn — brendbukdagi Libre Franklin. Zaxira: Times New Roman Bold Alegreya o'lchamiga moslangan (CLS). */
+@font-face { font-family: 'Alegreya'; font-style: normal; font-weight: 400 900; font-display: swap;
+  src: url(/shuxrat-ogli-v2/shrift/alegreya-cyrillic-ext.woff2) format('woff2'); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: 'Alegreya'; font-style: normal; font-weight: 400 900; font-display: swap;
+  src: url(/shuxrat-ogli-v2/shrift/alegreya-cyrillic.woff2) format('woff2'); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: 'Alegreya'; font-style: normal; font-weight: 400 900; font-display: swap;
+  src: url(/shuxrat-ogli-v2/shrift/alegreya-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Alegreya'; font-style: normal; font-weight: 400 900; font-display: swap;
+  src: url(/shuxrat-ogli-v2/shrift/alegreya-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Alegreya yedek'; src: local('Times New Roman Bold'), local('TimesNewRomanPS-BoldMT'), local('Times New Roman');
+  size-adjust: 98%; ascent-override: 103.7%; descent-override: 35.2%; line-gap-override: 0%; }
+
 /* Shuxrat o'g'li — brendbuk: ko'k #1E3782, oltin #D2A366, Libre Franklin */
 :root {
   --kok: #1E3782;
@@ -111,6 +124,7 @@
   --kenglik: 80rem;
   --chet: clamp(1rem, 4vw, 2.5rem);
   --radius: 0.875rem;
+  --display: 'Alegreya', 'Alegreya yedek', Georgia, serif;
 }
 
 /* Katta ekranlar: hamma o'lchamlar rem da — 1600 px dan keng ekranda sayt mutanosib kattalashadi
@@ -136,7 +150,8 @@ body {
 img { max-width: 100%; display: block; }
 figure { margin: 0; }
 h1, h2, h3 { margin: 0; line-height: 1.08; letter-spacing: -0.02em; }
-h2 { font-size: clamp(2rem, 4.2vw, 3.25rem); font-weight: 900; color: var(--kok); }
+h1, h2 { font-family: var(--display); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: clamp(2.125rem, 4.4vw, 3.5rem); color: var(--kok); }
 h3 { font-size: 1.5rem; font-weight: 800; }
 p { margin: 0; }
 a { color: inherit; }
