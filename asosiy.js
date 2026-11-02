@@ -404,21 +404,21 @@ window.yukl = function (idish, o) {
   var faol = 0, navbat = [], MAKS = 1;                 // bir vaqtda bitta video: keyingisi oldingisi to'liq kelgach
   function bosh_(el) {                                   // yuklashni boshlash (navbat bilan)
     el._yuklanyapti = true; faol++;
-    var bo = false;
+    var bo = false, sora = setInterval(toldimi, 400);   // hodisa kelmay qolsa ham (tez tarmoq/kesh) holat so'rab turiladi
     function bush() {                                   // navbatdagi joy bo'shaydi: video to'liq keldi yoki xato
-      if (bo) return; bo = true; faol--;
+      if (bo) return; bo = true; faol--; clearInterval(sora);
       ['progress', 'suspend', 'canplaythrough'].forEach(function (t) { el.removeEventListener(t, toldimi); });
       keyingi();
     }
     function toldimi(e) {
       // to'liq keldi — yoki brauzer o'zi yuklashni to'xtatdi (suspend) va o'ynashga yetarli zaxira bor
-      if (e && e.type === 'suspend' && el.readyState >= 3) return bush();
+      if (el.readyState >= 3 && (el.networkState === 1 || (e && e.type === 'suspend'))) return bush();   // 1 = NETWORK_IDLE
       try { if (el.duration > 0 && el.buffered.length && el.buffered.end(el.buffered.length - 1) >= el.duration - 0.3) bush(); } catch (x) {}
     }
     ['progress', 'suspend', 'canplaythrough'].forEach(function (t) { el.addEventListener(t, toldimi); });
     el.addEventListener('error', bush, { once: true });
     var s = el.querySelectorAll('source'); if (s.length) s[s.length - 1].addEventListener('error', bush, { once: true });
-    setTimeout(bush, 25000);                             // juda sekin tarmoqda navbat qotib qolmasin
+    setTimeout(bush, 12000);                             // juda sekin tarmoqda navbat qotib qolmasin
     if (el.preload !== 'auto') el.preload = 'auto';
     ijro(el);
   }
