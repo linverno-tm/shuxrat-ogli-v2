@@ -361,7 +361,7 @@ window.yukl = function (idish, o) {
 // Kamroq harakat tanlangan yoki trafik tejash yoqilgan bo'lsa — faqat muqova kadri turadi.
 // Bosh sahifadagi tovuq (.hb-tovuq) ozgina ko'rinishi bilan o'ynaydi (telefonda u ekran pastida, qisman ko'rinadi).
 // Kutish paytida idishda .yukl holati: muqova + nur + oltin chiziq (foiz — buffered/duration), `playing` bo'lgach yo'qoladi.
-// Bir vaqtda ko'pi bilan 2 ta video yuklanadi (katta ekranda 6 bosqich birdan tarmoqni bo'g'masin), birinchi — bosh tovuq.
+// Videolar navbat bilan bittadan yuklanadi: ekrandagisi birinchi, keyingisi oldingisi to'liq kelgach (birinchi — bosh tovuq).
 // ?video — ekranda video holati yozuvi (haqiqiy telefonda tekshirish uchun).
 (function () {
   var v = [].slice.call(document.querySelectorAll('video.jonli-video'));
@@ -401,18 +401,29 @@ window.yukl = function (idish, o) {
     var s = el.querySelectorAll('source'); if (s.length) s[s.length - 1].addEventListener('error', xato);
   });
   if (oynamaydi) return;
-  var faol = 0, navbat = [];
+  var faol = 0, navbat = [], MAKS = 1;                 // bir vaqtda bitta video: keyingisi oldingisi to'liq kelgach
   function bosh_(el) {                                   // yuklashni boshlash (navbat bilan)
     el._yuklanyapti = true; faol++;
     var bo = false;
-    function bush() { if (bo) return; bo = true; faol--; keyingi(); }
-    ['playing', 'canplaythrough', 'error', 'stalled'].forEach(function (t) { el.addEventListener(t, bush, { once: true }); });
-    setTimeout(bush, 10000);                             // sekin tarmoqda navbat qotib qolmasin
+    function bush() {                                   // navbatdagi joy bo'shaydi: video to'liq keldi yoki xato
+      if (bo) return; bo = true; faol--;
+      ['progress', 'suspend', 'canplaythrough'].forEach(function (t) { el.removeEventListener(t, toldimi); });
+      keyingi();
+    }
+    function toldimi(e) {
+      // to'liq keldi — yoki brauzer o'zi yuklashni to'xtatdi (suspend) va o'ynashga yetarli zaxira bor
+      if (e && e.type === 'suspend' && el.readyState >= 3) return bush();
+      try { if (el.duration > 0 && el.buffered.length && el.buffered.end(el.buffered.length - 1) >= el.duration - 0.3) bush(); } catch (x) {}
+    }
+    ['progress', 'suspend', 'canplaythrough'].forEach(function (t) { el.addEventListener(t, toldimi); });
+    el.addEventListener('error', bush, { once: true });
+    var s = el.querySelectorAll('source'); if (s.length) s[s.length - 1].addEventListener('error', bush, { once: true });
+    setTimeout(bush, 25000);                             // juda sekin tarmoqda navbat qotib qolmasin
     if (el.preload !== 'auto') el.preload = 'auto';
     ijro(el);
   }
-  function keyingi() {
-    while (faol < 2 && navbat.length) { var el = navbat.shift(); if (el._korinadi) bosh_(el); else el._navbatda = false; }
+  function keyingi() {                                   // ekrandagisi birinchi: ko'rinmay qolganlar navbatdan chiqadi
+    while (faol < MAKS && navbat.length) { var el = navbat.shift(); if (el._korinadi) bosh_(el); else el._navbatda = false; }
   }
   function ijro(el) {
     el.muted = true;                                    // iOS: ovozsiz bo'lsagina o'zi o'ynaydi
@@ -421,7 +432,7 @@ window.yukl = function (idish, o) {
   function oyna(el) {
     if (el._yuklanyapti || el.readyState >= 3) return ijro(el);
     if (el._navbatda) return;
-    if (faol < 2) bosh_(el); else { el._navbatda = true; navbat.push(el); }
+    if (faol < MAKS) bosh_(el); else { el._navbatda = true; navbat.push(el); }
   }
   function kuzatgich(chegara) {
     return new IntersectionObserver(function (es) {
