@@ -113,6 +113,10 @@
 .tx-qadam:nth-child(6) { grid-area: 2 / 1; }
 .tx-qadam { position: relative; view-timeline: --qadam; --markaz: calc((100cqw - 2 * var(--g)) / 3 * .375); }
 .tx-qadam-joy { position: relative; display: block; }
+/* bosqich: muqova darhol, video o'ynay boshlagach silliq ustiga chiqadi (asosiy.js → .oynayapti) */
+.tx-oyna-yotiq video { position: absolute; inset: 0; opacity: 0; transition: opacity .5s; }
+.tx-oyna-yotiq.oynayapti video { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .tx-oyna-yotiq video { transition: none; } }
 .tx-oyna-yotiq { aspect-ratio: 4 / 3; border-radius: var(--tuxum-yotiq); background: #C9D3EA; }
 .tx-qadam:nth-child(n+4) .tx-oyna-yotiq { border-radius: 60% 40% 40% 60% / 50%; }  /* qaytishda uchi chapga */
 .tx-qadam-son {
@@ -168,6 +172,7 @@
 .tx-hujjatlar li:nth-child(even) .tx-hujjat { rotate: 2.5deg; }
 .tx-hujjat:hover, .tx-hujjat:focus-visible { rotate: 0deg; translate: 0 -0.5rem; }
 .tx-hujjat img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.tx-hujjat[style] { background-size: cover; background-position: center; }  /* LQIP: haqiqiy surat kelguncha xira nusxa */
 .tx-hujjat .ik { width: 40%; height: 40%; margin: auto; }
 .tx-hujjat-nom { font-weight: 700; color: var(--kok); line-height: 1.3; }
 .tx-hujjat-nom b { display: block; font-size: 0.875rem; color: var(--oltin-toq); }

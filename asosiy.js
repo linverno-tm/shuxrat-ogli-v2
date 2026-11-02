@@ -283,12 +283,70 @@ var SOZLAMA = Object.assign({
 })();
 
 
+// Yuklanish holati (butun sayt): rasm/video/3D kelguncha idish ustida nur + oltin chiziq (CSS: .yukl, uslub.css).
+// window.yukl(idish, {chiziq}) → { foiz(0..1), tayyor() }. Bir idishga bitta holat; tayyor() — qatlam so'nadi va o'chadi.
+window.yukl = function (idish, o) {
+  if (!idish) return { foiz: function () {}, tayyor: function () {} };
+  if (idish._yukl && !idish._yukl.bitdi) return idish._yukl;
+  var q = document.createElement('span'); q.className = 'yukl-qatlam'; q.setAttribute('aria-hidden', 'true'); q.appendChild(document.createElement('i'));
+  if (getComputedStyle(idish).position === 'static') idish.classList.add('yukl-nisbiy');
+  idish.classList.remove('yukl-foizli'); idish.style.removeProperty('--p');
+  idish.classList.add('yukl'); idish.classList.toggle('yukl-chiziq', !!(o && o.chiziq));
+  idish.appendChild(q);
+  var h = {
+    foiz: function (p) { if (h.bitdi || !(p >= 0)) return; idish.classList.add('yukl-foizli'); idish.style.setProperty('--p', Math.min(1, p).toFixed(3)); },
+    tayyor: function () {
+      if (h.bitdi) return; h.bitdi = true; q.classList.add('bitdi');
+      setTimeout(function () {
+        q.remove();
+        if (idish._yukl !== h) return;                  // shu idishda yangi holat boshlangan (masalan, keyingi sahna)
+        idish.classList.remove('yukl', 'yukl-foizli', 'yukl-chiziq'); idish.style.removeProperty('--p'); idish._yukl = null;
+      }, 500);
+    }
+  };
+  idish._yukl = h; return h;
+};
+
+// Kech yuklanadigan katta rasmlar (loading=lazy): ekranga yaqinlashganda hali kelmagan bo'lsa — holat ko'rsatiladi, kelgach silliq chiqadi.
+// 3D posteri (Model3D o'zi boshqaradi) va kichik ikonlar (< 120 px) bundan tashqari.
+(function () {
+  var r = [].slice.call(document.querySelectorAll('main img[loading="lazy"]')).filter(function (i) { return !i.closest('.m3d') && !i.complete; });
+  if (!r.length) return;
+  function idishi(i) {
+    var p = i.parentElement; if (p.tagName === 'PICTURE') p = p.parentElement;
+    while (p && getComputedStyle(p).display === 'inline') p = p.parentElement;
+    return p;
+  }
+  function boshla(i) {
+    if (i.complete && i.naturalWidth) return;
+    if (i.getBoundingClientRect().width < 120) return;
+    var idish = idishi(i); if (!idish || idish._yukl) return;
+    var h = window.yukl(idish);
+    if (!idish.classList.contains('tx-oyna')) i.classList.add('yukl-img');   // muqova bo'lmagan rasm — silliq paydo bo'ladi
+    function bitdi() { i.classList.add('yukl-keldi'); h.tayyor(); }
+    i.addEventListener('load', bitdi, { once: true });
+    i.addEventListener('error', function () { i.classList.add('yukl-keldi'); h.tayyor(); }, { once: true });
+    if (i.complete && i.naturalWidth) bitdi();
+  }
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); boshla(e.target); } });
+  }, { rootMargin: '400px 0px' });
+  r.forEach(function (i) { io.observe(i); });
+})();
+
 // Video muqovasi (data-poster) va pleyer metama'lumoti ekranga yaqinlashganda yuklanadi — bosh ekran tezroq chiqsin.
 (function () {
   var v = document.querySelectorAll('video[data-poster]');
   if (!v.length) return;
   function qoy(el) {
-    if (el.dataset.poster) el.poster = el.dataset.poster;
+    if (el.dataset.poster) {
+      // muqova kelguncha idishda yuklanish holati
+      var h = window.yukl(el.parentElement), m = new Image();
+      m.onload = m.onerror = function () { h.tayyor(); };
+      m.src = el.dataset.poster;
+      el.poster = el.dataset.poster;
+    }
     el.removeAttribute('data-poster');
     if (el.closest('.pleyer') && el.preload === 'none') el.preload = 'metadata';
   }
@@ -302,29 +360,68 @@ var SOZLAMA = Object.assign({
 // Jonli videolar (.jonli-video, filmdan qisqa ovozsiz sahnalar): ko'rinishga kirganda o'ynaydi, chiqqanda to'xtaydi.
 // Kamroq harakat tanlangan yoki trafik tejash yoqilgan bo'lsa — faqat muqova kadri turadi.
 // Bosh sahifadagi tovuq (.hb-tovuq) ozgina ko'rinishi bilan o'ynaydi (telefonda u ekran pastida, qisman ko'rinadi).
+// Kutish paytida idishda .yukl holati: muqova + nur + oltin chiziq (foiz — buffered/duration), `playing` bo'lgach yo'qoladi.
+// Bir vaqtda ko'pi bilan 2 ta video yuklanadi (katta ekranda 6 bosqich birdan tarmoqni bo'g'masin), birinchi — bosh tovuq.
 // ?video — ekranda video holati yozuvi (haqiqiy telefonda tekshirish uchun).
 (function () {
   var v = [].slice.call(document.querySelectorAll('video.jonli-video'));
   var tekshir = /[?&]video\b/.test(location.search);
   var rm = matchMedia('(prefers-reduced-motion: reduce)').matches, tejash = !!(navigator.connection && navigator.connection.saveData);
+  var IO = 'IntersectionObserver' in window, oynamaydi = !v.length || !IO || rm || tejash;
   if (tekshir) {
     var b = document.createElement('pre');
     b.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;margin:0;padding:8px 10px;border-radius:10px;background:rgba(0,0,0,.82);color:#fff;font:12px/1.4 ui-monospace,monospace;white-space:pre-wrap;pointer-events:none';
     document.body.appendChild(b);
     setInterval(function () {
-      b.textContent = 'harakatni kamaytirish: ' + rm + ' · tejash: ' + tejash + ' · IO: ' + ('IntersectionObserver' in window) + '\n' + v.map(function (el, i) {
+      b.textContent = 'harakatni kamaytirish: ' + rm + ' · tejash: ' + tejash + ' · IO: ' + IO + ' · yuklanmoqda: ' + faol + ' · navbatda: ' + navbat.length + '\n' + v.map(function (el, i) {
         var r = el.getBoundingClientRect();
         return i + ': ' + (el.paused ? 'TURIBDI' : 'oynayapti') + ' t=' + el.currentTime.toFixed(1) + ' rs=' + el.readyState + ' ns=' + el.networkState +
           ' xato=' + (el.error ? el.error.code : '-') + ' kor=' + (el._korinadi ? 'ha' : 'yoq') + ' ' + (el.currentSrc || '').split('/shuxrat-ogli-v2/').pop() +
           ' ' + Math.round(r.width) + 'x' + Math.round(r.height) + (el._rad ? ' rad:' + el._rad : '');
-      }).slice(0, 3).join('\n');
+      }).slice(0, 4).join('\n');
     }, 500);
   }
-  if (!v.length || !('IntersectionObserver' in window) || rm || tejash) return;
-  function oyna(el) {
+  // yuklanish holati: har video idishi (tuxum oynasi yoki ota element)
+  v.forEach(function (el) {
+    var idish = el.closest('.tx-oyna') || el.closest('.hb-tovuq') || el.parentElement;
+    var bosh = !!el.closest('.hb-tovuq');
+    var muqova = idish.querySelector('img');
+    if (oynamaydi) {                                    // video o'ynamaydi: faqat muqova kelguncha holat
+      if (muqova && !muqova.complete) { var hm = window.yukl(idish); muqova.addEventListener('load', hm.tayyor, { once: true }); muqova.addEventListener('error', hm.tayyor, { once: true }); }
+      return;
+    }
+    var h = window.yukl(idish, { chiziq: bosh });       // bosh ekranda surat tiniq tursin — faqat chiziq
+    function foiz() {
+      try { if (el.duration > 0 && el.buffered.length) h.foiz(el.buffered.end(el.buffered.length - 1) / el.duration); } catch (e) {}
+    }
+    el.addEventListener('progress', foiz); el.addEventListener('loadedmetadata', foiz);
+    el.addEventListener('playing', function () { foiz(); idish.classList.add('oynayapti'); h.tayyor(); }, { once: true });
+    function xato() { h.tayyor(); }                     // xato: muqova qoladi, holat yo'qoladi
+    el.addEventListener('error', xato);
+    var s = el.querySelectorAll('source'); if (s.length) s[s.length - 1].addEventListener('error', xato);
+  });
+  if (oynamaydi) return;
+  var faol = 0, navbat = [];
+  function bosh_(el) {                                   // yuklashni boshlash (navbat bilan)
+    el._yuklanyapti = true; faol++;
+    var bo = false;
+    function bush() { if (bo) return; bo = true; faol--; keyingi(); }
+    ['playing', 'canplaythrough', 'error', 'stalled'].forEach(function (t) { el.addEventListener(t, bush, { once: true }); });
+    setTimeout(bush, 10000);                             // sekin tarmoqda navbat qotib qolmasin
     if (el.preload !== 'auto') el.preload = 'auto';
+    ijro(el);
+  }
+  function keyingi() {
+    while (faol < 2 && navbat.length) { var el = navbat.shift(); if (el._korinadi) bosh_(el); else el._navbatda = false; }
+  }
+  function ijro(el) {
     el.muted = true;                                    // iOS: ovozsiz bo'lsagina o'zi o'ynaydi
     var p = el.play(); if (p && p.catch) p.catch(function (e) { el._rad = e && e.name; });
+  }
+  function oyna(el) {
+    if (el._yuklanyapti || el.readyState >= 3) return ijro(el);
+    if (el._navbatda) return;
+    if (faol < 2) bosh_(el); else { el._navbatda = true; navbat.push(el); }
   }
   function kuzatgich(chegara) {
     return new IntersectionObserver(function (es) {
@@ -345,7 +442,7 @@ var SOZLAMA = Object.assign({
     v.forEach(function (el) {
       el.addEventListener('ended', qaytar);
       // biz faqat ko'rinmay qolganda to'xtatamiz — ko'rinib turganda to'xtasa (Safari tsikl oxirida), qayta boshlaymiz
-      el.addEventListener('pause', function () { var el = this; setTimeout(function () { if (el.paused) qaytar.call(el); }, 60); });
+      el.addEventListener('pause', function () { var el = this; setTimeout(function () { if (el.paused && el.readyState >= 3) qaytar.call(el); }, 60); });
       (el.closest('.hb-tovuq') ? bosh : oddiy).observe(el);
     });
   }
